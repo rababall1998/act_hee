@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบบริหารจัดการสำหรับเจ้าหน้าที่ - โรงพยาบาลนาแก</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: '#f0f5fa',
+              100: '#e1ecf5',
+              600: '#1b4d89',
+              800: '#133560',
+              900: '#0F2C59',
+              950: '#091c38'
+            }
+          },
+          fontFamily: {
+            prompt: ['Prompt', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-prompt flex flex-col min-h-screen">
+
+  <!-- ADMIN TOP NAVBAR -->
+  <header class="theme-bg-dark bg-navy-950 text-white border-b border-navy-800 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-sky-500 flex items-center justify-center text-white text-lg">
+          <i class="fa-solid fa-hospital-user"></i>
+        </div>
+        <div>
+          <span class="font-bold text-base block text-white leading-tight">ระบบเจ้าหน้าที่โรงพยาบาลนาแก</span>
+          <span class="text-[10px] text-sky-300 font-mono">STAFF PORTAL • NA KAE HOSPITAL</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="px-3 py-1.5 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-200 text-xs transition flex items-center">
+          <i class="fa-solid fa-house mr-1.5"></i> หน้าเว็บหลัก
+        </a>
+        <div class="flex items-center space-x-2 pl-2 border-l border-navy-800 text-xs text-slate-300">
+          <div class="w-7 h-7 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-white text-[11px] shadow">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <span class="hidden sm:inline font-medium text-emerald-400">แอดมิน (nakae11109)</span>
+        </div>
+        <button onclick="handleLogout()" class="px-3 py-1.5 rounded-xl bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-semibold transition flex items-center shadow-sm" title="ออกจากระบบ">
+          <i class="fa-solid fa-right-from-bracket mr-1.5"></i> ออกจากระบบ
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ADMIN DASHBOARD CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow space-y-8">
+    
+    <!-- STATS OVERVIEW CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+      
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-medium">ยอดนัดหมายทั้งหมด</span>
+          <div id="stat-total-apt" class="text-2xl font-bold text-navy-900">0</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-user-clock"></i>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-medium">ยืนยันแล้ว / รอรับบริการ</span>
+          <div id="stat-pending-apt" class="text-2xl font-bold text-emerald-600">0</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-comments"></i>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-medium">เรื่องร้องเรียน/เสนอแนะ</span>
+          <div id="stat-total-cp" class="text-2xl font-bold text-amber-600">0</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-user-doctor"></i>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-medium">แพทย์ประจำการในระบบ</span>
+          <div id="stat-total-docs" class="text-2xl font-bold text-purple-700">8 ท่าน</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-images"></i>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-medium">สไลด์แบนเนอร์หน้าแรก</span>
+          <div id="stat-total-slides" class="text-2xl font-bold text-sky-700">4 สไลด์</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-newspaper"></i>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-medium">ข่าวสารและกิจกรรม</span>
+          <div id="stat-total-news" class="text-2xl font-bold text-emerald-700">8 รายการ</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500 font-medium">เอกสาร ITA ในระบบ</span>
+          <div id="stat-total-ita" class="text-2xl font-bold text-indigo-700">0 รายการ</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TABS NAVIGATION -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-2 flex flex-wrap gap-2 text-xs font-bold">
+      <button id="tab-apt-btn" class="px-5 py-2.5 rounded-xl bg-navy-900 text-white transition flex items-center">
+        <i class="fa-solid fa-calendar-days mr-2"></i> จัดการรายการนัดหมายผู้ป่วย
+      </button>
+      <button id="tab-docs-btn" class="px-5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center">
+        <i class="fa-solid fa-user-doctor mr-2"></i> จัดการรายชื่อแพทย์และตารางตรวจ
+      </button>
+      <button id="tab-slides-btn" class="px-5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center">
+        <i class="fa-solid fa-images mr-2 text-sky-600"></i> จัดการสไลด์แบนเนอร์หน้าแรก
+      </button>
+      <button id="tab-news-btn" class="px-5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center">
+        <i class="fa-solid fa-newspaper mr-2 text-emerald-600"></i> จัดการข่าวสารและกิจกรรม
+      </button>
+      <button id="tab-ita-btn" class="px-5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center">
+        <i class="fa-solid fa-shield-halved mr-2 text-indigo-600"></i> จัดการฐานข้อมูล ITA
+      </button>
+      <button id="tab-cp-btn" class="px-5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center">
+        <i class="fa-solid fa-comment-dots mr-2"></i> ศูนย์จัดการเรื่องร้องเรียน/ข้อเสนอแนะ
+      </button>
+    </div>
+
+    <!-- TAB 1: APPOINTMENTS TABLE -->
+    <div id="tab-apt-content" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-navy-900">รายการนัดหมายตรวจรักษาออนไลน์</h2>
+          <p class="text-xs text-slate-500">ข้อมูลเชื่อมโยงจากระบบจองคิวออนไลน์ของประชาชน (สิทธิ 30 บาทรักษาทุกที่, บัตรทอง, ประกันสังคม, ข้าราชการ)</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="admin-apt-search" placeholder="ค้นหาชื่อ, คิว, หรือเลขบัตร..." class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs w-64 focus:outline-none focus:ring-2 focus:ring-sky-500">
+          <button onclick="reloadAppointmentsTable()" class="p-2 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 text-xs" title="รีเฟรชข้อมูล">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+              <th class="py-3 px-3 font-bold">คิวตรวจ</th>
+              <th class="py-3 px-3 font-bold">ชื่อ-นามสกุล / เลขบัตร ปชช.</th>
+              <th class="py-3 px-3 font-bold">เบอร์โทร</th>
+              <th class="py-3 px-3 font-bold">สิทธิการรักษา</th>
+              <th class="py-3 px-3 font-bold">แผนก / แพทย์</th>
+              <th class="py-3 px-3 font-bold">วัน-เวลานัด</th>
+              <th class="py-3 px-3 font-bold">สถานะ</th>
+              <th class="py-3 px-3 font-bold text-center">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="apt-table-body" class="divide-y divide-slate-100 text-slate-600">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: DOCTOR MANAGEMENT -->
+    <div id="tab-docs-content" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-navy-900">จัดการทำเนียบแพทย์และตารางออกตรวจ</h2>
+          <p class="text-xs text-slate-500">สามารถเพิ่มรายชื่อแพทย์จริง แก้ไขเวลาออกตรวจ หรือปรับแต่งความเชี่ยวชาญได้โดยตรง</p>
+        </div>
+        <button onclick="openDoctorModal()" class="px-4 py-2 bg-navy-900 hover:bg-sky-600 text-white rounded-xl text-xs font-bold transition flex items-center shadow">
+          <i class="fa-solid fa-plus mr-1.5"></i> เพิ่มแพทย์ใหม่
+        </button>
+      </div>
+
+      <!-- Doctors Grid in Admin -->
+      <div id="admin-doctors-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- TAB 3: COMPLAINTS TABLE -->
+    <div id="tab-cp-content" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-navy-900">รายการเรื่องร้องเรียนและข้อเสนอแนะ</h2>
+          <p class="text-xs text-slate-500">สำหรับผู้รับผิดชอบงานคุ้มครองผู้บริโภคและพัฒนาคุณภาพบริการ รพ.นาแก</p>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+              <th class="py-3 px-3 font-bold">รหัส Ticket</th>
+              <th class="py-3 px-3 font-bold">ประเภท / ด้าน</th>
+              <th class="py-3 px-3 font-bold">หัวข้อเรื่อง & รายละเอียด</th>
+              <th class="py-3 px-3 font-bold">ผู้แจ้ง / ติดต่อ</th>
+              <th class="py-3 px-3 font-bold">วันที่แจ้ง</th>
+              <th class="py-3 px-3 font-bold">สถานะดำเนินการ</th>
+              <th class="py-3 px-3 font-bold text-center">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="cp-table-body" class="divide-y divide-slate-100 text-slate-600">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: SLIDES MANAGEMENT -->
+    <div id="tab-slides-content" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-navy-900 flex items-center">
+            <i class="fa-solid fa-images text-sky-600 mr-2"></i> จัดการสไลด์แบนเนอร์หน้าแรก (Hero Slider)
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">เพิ่ม ลบ แก้ไขรูปภาพ หัวข้อ คำบรรยาย และปุ่มกดของสไลด์หน้าแรก โดยข้อมูลจะอัปเดตไปยังหน้าแรกทันที</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="index.html" target="_blank" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center" title="เปิดดูผลลัพธ์หน้าแรกในแท็บใหม่">
+            <i class="fa-solid fa-arrow-up-right-from-square mr-1.5 text-sky-600"></i> เปิดดูหน้าแรก
+          </a>
+          <button onclick="resetSlidesToDefault()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center" title="คืนค่าเป็น 4 สไลด์ตั้งต้นของ รพ.">
+            <i class="fa-solid fa-rotate-left mr-1.5"></i> คืนค่าเริ่มต้น
+          </button>
+          <button onclick="openSlideModal()" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-bold transition flex items-center shadow">
+            <i class="fa-solid fa-plus mr-1.5"></i> เพิ่มสไลด์ใหม่
+          </button>
+        </div>
+      </div>
+
+      <!-- Slide list container -->
+      <div id="admin-slides-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- TAB 5: NEWS & ACTIVITIES MANAGEMENT -->
+    <div id="tab-news-content" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-navy-900 flex items-center">
+            <i class="fa-solid fa-newspaper text-emerald-600 mr-2"></i> ศูนย์จัดการข่าวสาร กิจกรรม และประกาศ รพ.นาแก
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">เพิ่ม ลบ แก้ไขภาพกิจกรรม อัลบั้มรูปภาพ ข่าวประชาสัมพันธ์ และประกาศจัดซื้อจัดจ้าง</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="news.html" target="_blank" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center" title="เปิดดูหน้าข่าวสารและกิจกรรม">
+            <i class="fa-solid fa-arrow-up-right-from-square mr-1.5 text-sky-600"></i> เปิดหน้าข่าวสาร
+          </a>
+          <button onclick="resetNewsToDefault()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center" title="คืนค่าเป็นข้อมูลเริ่มต้น">
+            <i class="fa-solid fa-rotate-left mr-1.5"></i> คืนค่าเริ่มต้น
+          </button>
+          <button onclick="openNewsModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center shadow">
+            <i class="fa-solid fa-plus mr-1.5"></i> เพิ่มข่าว/กิจกรรมใหม่
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters & Search in Admin -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <button onclick="filterAdminNews('all', this)" class="admin-news-cat-btn px-3 py-1.5 rounded-lg bg-navy-900 text-white font-bold transition">ทั้งหมด</button>
+          <button onclick="filterAdminNews('ข่าวกิจกรรม', this)" class="admin-news-cat-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">📸 ข่าวกิจกรรม</button>
+          <button onclick="filterAdminNews('ข่าวประชาสัมพันธ์', this)" class="admin-news-cat-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">📢 ข่าวประชาสัมพันธ์</button>
+          <button onclick="filterAdminNews('ประกาศทางการ', this)" class="admin-news-cat-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">📋 ประกาศทางการ</button>
+          <button onclick="filterAdminNews('จัดซื้อจัดจ้าง', this)" class="admin-news-cat-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">💼 จัดซื้อจัดจ้าง</button>
+          <button onclick="filterAdminNews('สาระสุขภาพ', this)" class="admin-news-cat-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">🩺 สาระสุขภาพ</button>
+        </div>
+        <div class="relative w-full sm:w-64">
+          <input type="text" id="admin-news-search" placeholder="ค้นหาตามชื่อเรื่อง..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+        </div>
+      </div>
+
+      <!-- News & Activities List in Admin -->
+      <div id="admin-news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- TAB 6: ITA MANAGEMENT -->
+    <div id="tab-ita-content" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-navy-900 flex items-center">
+            <i class="fa-solid fa-shield-halved text-indigo-600 mr-2"></i> จัดการฐานข้อมูลเอกสาร ITA (Integrity & Transparency Assessment)
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">เพิ่ม ลบ แก้ไขเอกสารหลักฐานตัวชี้วัดความโปร่งใสรายปี (2566 - 2569) และรายไตรมาส</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="ita.html" target="_blank" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center" title="เปิดดูหน้าฐานข้อมูล ITA">
+            <i class="fa-solid fa-arrow-up-right-from-square mr-1.5 text-sky-600"></i> เปิดหน้า ITA
+          </a>
+          <button onclick="resetItaToDefault()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center" title="คืนค่าเป็นข้อมูลเริ่มต้น">
+            <i class="fa-solid fa-rotate-left mr-1.5"></i> คืนค่าเริ่มต้น
+          </button>
+          <button onclick="openItaModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition flex items-center shadow">
+            <i class="fa-solid fa-plus mr-1.5"></i> เพิ่มเอกสาร ITA ใหม่
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters & Search in Admin (Year filter ordered from least to greatest: 2566 -> 2567 -> 2568 -> 2569) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <button onclick="filterAdminIta('all', this)" class="admin-ita-year-btn px-3 py-1.5 rounded-lg bg-navy-900 text-white font-bold transition">ทั้งหมด</button>
+          <button onclick="filterAdminIta('2566', this)" class="admin-ita-year-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">ITA 2566</button>
+          <button onclick="filterAdminIta('2567', this)" class="admin-ita-year-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">ITA 2567</button>
+          <button onclick="filterAdminIta('2568', this)" class="admin-ita-year-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">ITA 2568</button>
+          <button onclick="filterAdminIta('2569', this)" class="admin-ita-year-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition">ITA 2569</button>
+        </div>
+        <div class="relative w-full sm:w-64">
+          <input type="text" id="admin-ita-search" placeholder="ค้นหารหัส เช่น MOIT หรือชื่อเอกสาร..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+        </div>
+      </div>
+
+      <!-- ITA Table in Admin -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-100 text-slate-600 uppercase border-y text-[11px]">
+            <tr>
+              <th class="py-3 px-3">ปีงบประมาณ</th>
+              <th class="py-3 px-3">ไตรมาส</th>
+              <th class="py-3 px-3">รหัสตัวชี้วัด</th>
+              <th class="py-3 px-3">ชื่อเอกสารหลักฐาน</th>
+              <th class="py-3 px-3">ลิงก์เอกสาร</th>
+              <th class="py-3 px-3 text-right">การกระทำ</th>
+            </tr>
+          </thead>
+          <tbody id="admin-ita-table-body" class="divide-y divide-slate-100">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ADD/EDIT DOCTOR MODAL -->
+  <div id="doctor-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative my-8">
+      <button onclick="closeDoctorModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 id="doc-modal-title" class="text-lg font-bold text-navy-900 mb-4 flex items-center">
+        <i class="fa-solid fa-user-doctor text-sky-600 mr-2"></i> เพิ่มแพทย์ใหม่
+      </h3>
+
+      <form id="doctor-form" class="space-y-4 text-xs">
+        <input type="hidden" id="edit-doc-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ชื่อ - สกุล แพทย์ *</label>
+          <input type="text" id="doc-name" required placeholder="เช่น นพ. วรพจน์ ศิริพาณิชย์" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ตำแหน่ง / ความเชี่ยวชาญ *</label>
+          <input type="text" id="doc-title" required placeholder="เช่น นายแพทย์ชำนาญการพิเศษ / อายุรแพทย์" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">แผนกประจำ *</label>
+          <select id="doc-dept" required class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            <option value="opd">แผนกผู้ป่วยนอก (OPD)</option>
+            <option value="er">แผนกอุบัติเหตุและฉุกเฉิน (ER)</option>
+            <option value="pediatrics">คลินิกกุมารเวชกรรม (เด็ก)</option>
+            <option value="dental">กลุ่มงานทันตกรรม</option>
+            <option value="ortho-surgery">คลินิกศัลยกรรมกระดูกและข้อ</option>
+            <option value="obgyn">คลินิกสูติ-นรีเวชกรรม</option>
+            <option value="thai-med">งานแพทย์แผนไทย</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ความชำนาญเฉพาะทาง</label>
+          <input type="text" id="doc-specialty" placeholder="เช่น โรคเบาหวาน, ผ่าตัดกระดูก, ทันตกรรมบูรณะ" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ประวัติการศึกษา / วว.</label>
+          <input type="text" id="doc-education" placeholder="เช่น แพทยศาสตรบัณฑิต จุฬาลงกรณ์มหาวิทยาลัย" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">วันและเวลาออกตรวจ *</label>
+          <input type="text" id="doc-schedule" required placeholder="เช่น จันทร์, พุธ, ศุกร์ (08:30 - 12:00 น.)" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ลิงก์รูปภาพแพทย์ (URL)</label>
+          <input type="url" id="doc-image" placeholder="https://..." class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+
+        <div class="pt-4 flex justify-end space-x-2 border-t">
+          <button type="button" onclick="closeDoctorModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl font-medium">ยกเลิก</button>
+          <button type="submit" class="px-5 py-2 bg-navy-900 hover:bg-sky-600 text-white rounded-xl font-bold">บันทึกข้อมูล</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- APPOINTMENT SLIP MODAL -->
+  <div id="slip-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative my-8">
+      <button onclick="document.getElementById('slip-modal').classList.add('hidden')" class="no-print absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="slip-modal-content"></div>
+
+      <div class="no-print mt-6 flex justify-end space-x-3 border-t pt-4">
+        <button onclick="window.print()" class="px-5 py-2.5 bg-navy-900 hover:bg-sky-600 text-white rounded-xl text-xs font-bold transition flex items-center">
+          <i class="fa-solid fa-print mr-2"></i> พิมพ์ใบนัด
+        </button>
+        <button onclick="document.getElementById('slip-modal').classList.add('hidden')" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl text-xs font-medium transition">
+          ปิด
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT SLIDE MODAL -->
+  <div id="slide-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative my-8">
+      <button onclick="closeSlideModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 id="slide-modal-title" class="text-lg font-bold text-navy-900 mb-4 flex items-center">
+        <i class="fa-solid fa-images text-sky-600 mr-2"></i> เพิ่มสไลด์ใหม่
+      </h3>
+
+      <form id="slide-form" class="space-y-4 text-xs">
+        <input type="hidden" id="edit-slide-index" value="-1">
+        
+        <!-- Category Badge -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">ข้อความป้ายกำกับ (Badge) *</label>
+            <input type="text" id="slide-badge-input" required placeholder="เช่น นโยบายกระทรวง สธ. • สปสช." class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">ไอคอนป้ายกำกับ (FontAwesome)</label>
+            <select id="slide-badge-icon-input" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+              <option value="fa-shield-heart">fa-shield-heart (หัวใจ-โล่ห์ นโยบาย)</option>
+              <option value="fa-truck-medical">fa-truck-medical (รถพยาบาล ฉุกเฉิน)</option>
+              <option value="fa-user-doctor">fa-user-doctor (แพทย์ คลินิก)</option>
+              <option value="fa-heart-pulse">fa-heart-pulse (ชีพจร ตรวจสุขภาพ)</option>
+              <option value="fa-hospital">fa-hospital (โรงพยาบาลทั่วไป)</option>
+              <option value="fa-bullhorn">fa-bullhorn (ข่าวสารประชาสัมพันธ์)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">หัวข้อหลักสไลด์ (Title) *</label>
+          <input type="text" id="slide-title-input" required placeholder="เช่น 30 บาทรักษาทุกที่ ด้วยบัตรประชาชนใบเดียว" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          <p class="text-[10px] text-slate-400 mt-1">สามารถใส่แท็ก &lt;br&gt; เพื่อขึ้นบรรทัดใหม่ได้</p>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">คำบรรยายสไลด์ (Description) *</label>
+          <textarea id="slide-desc-input" required rows="3" placeholder="ข้อความรายละเอียดเพื่อประชาสัมพันธ์แก่ประชาชน..." class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
+        </div>
+
+        <!-- Image URL with preset suggestions -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ลิงก์รูปภาพพื้นหลังสไลด์ (Image URL) *</label>
+          <input type="url" id="slide-image-input" required placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          
+          <div class="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-500">
+            <span>ภาพตัวอย่างแนะนำ:</span>
+            <button type="button" onclick="setSlidePresetImage('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1600&auto=format&fit=crop&q=80')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200">รพ.ทั่วไป</button>
+            <button type="button" onclick="setSlidePresetImage('https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=1600&auto=format&fit=crop&q=80')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200">ฉุกเฉิน ER</button>
+            <button type="button" onclick="setSlidePresetImage('https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1600&auto=format&fit=crop&q=80')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200">แพทย์/คลินิก</button>
+            <button type="button" onclick="setSlidePresetImage('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&auto=format&fit=crop&q=80')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200">วัคซีน/สุขภาพ</button>
+          </div>
+        </div>
+
+        <!-- Buttons Configuration -->
+        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+          <span class="font-bold text-navy-900 block border-b pb-1">การตั้งค่าปุ่มกดในสไลด์ (Call-to-Action)</span>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ข้อความปุ่มหลัก *</label>
+              <input type="text" id="slide-primary-text" required placeholder="เช่น จองคิวนัดหมายออนไลน์" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ลิงก์ปุ่มหลัก *</label>
+              <input type="text" id="slide-primary-link" required placeholder="เช่น appointment.html หรือ tel:042571205" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">โทนสีปุ่มหลัก</label>
+              <select id="slide-primary-color" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+                <option value="bg-sky-500 hover:bg-sky-400 shadow-sky-500/30">สีฟ้า (มาตรฐาน Sky)</option>
+                <option value="bg-rose-600 hover:bg-rose-500 shadow-rose-600/30">สีแดง (ฉุกเฉิน Rose)</option>
+                <option value="bg-indigo-600 hover:bg-indigo-500 shadow-indigo-600/30">สีน้ำเงินคราม (Indigo)</option>
+                <option value="bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30">สีเขียวมรกต (สธ. Emerald)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ไอคอนปุ่มหลัก</label>
+              <input type="text" id="slide-primary-icon" placeholder="fa-calendar-check" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ข้อความปุ่มรอง (ถ้ามี)</label>
+              <input type="text" id="slide-secondary-text" placeholder="เช่น ข้อมูลโรงพยาบาล" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ลิงก์ปุ่มรอง</label>
+              <input type="text" id="slide-secondary-link" placeholder="about.html" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-end space-x-2 border-t">
+          <button type="button" onclick="closeSlideModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl font-medium">ยกเลิก</button>
+          <button type="submit" class="px-5 py-2 bg-navy-900 hover:bg-sky-600 text-white rounded-xl font-bold">บันทึกสไลด์</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT NEWS & ACTIVITY MODAL -->
+  <div id="news-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative my-8 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeNewsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 id="news-modal-title" class="text-lg font-bold text-navy-900 mb-4 flex items-center">
+        <i class="fa-solid fa-newspaper text-emerald-600 mr-2"></i> เพิ่มข่าวสาร/กิจกรรมใหม่
+      </h3>
+
+      <form id="news-form" class="space-y-4 text-xs">
+        <input type="hidden" id="edit-news-id" value="">
+        
+        <!-- Category & Date -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">หมวดหมู่ข่าว/กิจกรรม *</label>
+            <select id="news-category-input" required class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium" onchange="toggleCategorySpecificFields(this.value)">
+              <option value="ข่าวกิจกรรม">📸 ข่าวกิจกรรม รพ. (มีอัลบั้มภาพ)</option>
+              <option value="ข่าวประชาสัมพันธ์">📢 ข่าวประชาสัมพันธ์</option>
+              <option value="ประกาศทางการ">📋 ประกาศทางการ</option>
+              <option value="จัดซื้อจัดจ้าง">💼 จัดซื้อจัดจ้าง (e-Bidding)</option>
+              <option value="สาระสุขภาพ">🩺 สาระสุขภาพ</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">วันที่เผยแพร่/จัดกิจกรรม *</label>
+            <input type="text" id="news-date-input" required placeholder="เช่น 25 ต.ค. 2569" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">หัวข้อข่าวสาร/กิจกรรม *</label>
+          <input type="text" id="news-title-input" required placeholder="เช่น หน่วยแพทย์เคลื่อนที่ พอ.สว. ให้บริการตรวจสุขภาพประชาชน..." class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+
+        <!-- Location & Department (For Activities) -->
+        <div id="field-activity-group" class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-sky-50 rounded-2xl border border-sky-100">
+          <div>
+            <label class="block font-bold text-sky-900 mb-1"><i class="fa-solid fa-location-dot mr-1"></i> สถานที่จัดกิจกรรม</label>
+            <input type="text" id="news-location-input" placeholder="เช่น ศาลาประชาคม หมู่ 7 ตำบลบ้านแก้ง" class="w-full px-3 py-2 rounded-xl border border-sky-200 bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-sky-900 mb-1"><i class="fa-solid fa-building-user mr-1"></i> กลุ่มงาน/หน่วยงานรับผิดชอบ</label>
+            <input type="text" id="news-department-input" placeholder="เช่น กลุ่มงานเวชปฏิบัติครอบครัวและชุมชน" class="w-full px-3 py-2 rounded-xl border border-sky-200 bg-white">
+          </div>
+        </div>
+
+        <!-- Summary & Details -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">เนื้อหาข่าว / รายละเอียดกิจกรรม *</label>
+          <textarea id="news-summary-input" required rows="4" placeholder="พิมพ์รายละเอียดข่าวหรือสรุปผลการจัดกิจกรรม..." class="w-full px-3 py-2 rounded-xl border border-slate-300 leading-relaxed"></textarea>
+        </div>
+
+        <!-- Cover Image URL with Presets -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ลิงก์รูปภาพหน้าปก (Cover Image URL) *</label>
+          <input type="url" id="news-image-input" required placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          
+          <div class="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-500">
+            <span>ภาพแนะนำ:</span>
+            <button type="button" onclick="setNewsPresetImage('https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800&auto=format&fit=crop&q=80')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200">หน่วยแพทย์ชุมชน</button>
+            <button type="button" onclick="setNewsPresetImage('https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=800&auto=format&fit=crop&q=80')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200">บริจาคโลหิต</button>
+            <button type="button" onclick="setNewsPresetImage('https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=800&auto=format&fit=crop&q=80')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200">ซ้อมแผนฉุกเฉิน</button>
+            <button type="button" onclick="setNewsPresetImage('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200">บริการตรวจรักษา</button>
+          </div>
+        </div>
+
+        <!-- Gallery Images Textarea (For Activities) -->
+        <div id="field-gallery-group" class="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1.5">
+          <label class="block font-bold text-navy-900"><i class="fa-solid fa-images text-sky-600 mr-1"></i> อัลบั้มรูปภาพกิจกรรม (หลายรูปภาพ)</label>
+          <p class="text-[10px] text-slate-500">ใส่ลิงก์รูปภาพ (Image URLs) บรรทัดละ 1 ลิงก์ เพื่อแสดงเป็นอัลบั้มรูปภาพในกิจกรรม</p>
+          <textarea id="news-gallery-input" rows="3" placeholder="https://images.unsplash.com/photo-1...&#10;https://images.unsplash.com/photo-2...&#10;https://images.unsplash.com/photo-3..." class="w-full px-3 py-2 rounded-xl border border-slate-300 font-mono text-[11px] bg-white"></textarea>
+        </div>
+
+        <!-- Attachment (For Official & Procurement) -->
+        <div id="field-attachment-group" class="p-3 bg-purple-50/70 rounded-2xl border border-purple-100 space-y-2">
+          <label class="block font-bold text-purple-900"><i class="fa-solid fa-file-pdf text-purple-600 mr-1"></i> ไฟล์เอกสารแนบ (เช่น ประกาศ PDF)</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input type="text" id="news-attachment-name" placeholder="ชื่อไฟล์ เช่น ประกาศรับสมัครงาน.pdf" class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white">
+            <input type="text" id="news-attachment-url" placeholder="ลิงก์ไฟล์ เช่น assets/docs/... หรือ https://..." class="w-full px-3 py-2 rounded-xl border border-purple-200 bg-white">
+          </div>
+        </div>
+
+        <!-- Featured Checkbox -->
+        <div class="flex items-center space-x-2 pt-2">
+          <input type="checkbox" id="news-featured-input" class="w-4 h-4 rounded text-sky-600 border-slate-300 focus:ring-sky-500">
+          <label for="news-featured-input" class="font-bold text-slate-700">ปักหมุดเป็นข่าวเด่น / ไฮไลต์หน้าแรก (Featured)</label>
+        </div>
+
+        <div class="pt-4 flex justify-end space-x-2 border-t">
+          <button type="button" onclick="closeNewsModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl font-medium">ยกเลิก</button>
+          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold shadow">บันทึกข้อมูล</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT ITA MODAL -->
+  <div id="ita-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative my-8 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeItaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 id="ita-modal-title" class="text-lg font-bold text-navy-900 mb-4 flex items-center">
+        <i class="fa-solid fa-shield-halved text-indigo-600 mr-2"></i> เพิ่มเอกสาร ITA ใหม่
+      </h3>
+
+      <form id="ita-form" class="space-y-4 text-xs">
+        <input type="hidden" id="edit-ita-id" value="">
+        
+        <!-- Year and Quarter -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">ปีงบประมาณ *</label>
+            <select id="ita-year-input" required class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium">
+              <option value="2566">พ.ศ. 2566 (ITA 2566)</option>
+              <option value="2567">พ.ศ. 2567 (ITA 2567)</option>
+              <option value="2568">พ.ศ. 2568 (ITA 2568)</option>
+              <option value="2569" selected>พ.ศ. 2569 (ITA 2569 - ปัจจุบัน)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">ไตรมาส *</label>
+            <select id="ita-quarter-input" required class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium">
+              <option value="1">ไตรมาสที่ 1 (ต.ค. - ธ.ค.)</option>
+              <option value="2">ไตรมาสที่ 2 (ม.ค. - มี.ค.)</option>
+              <option value="3">ไตรมาสที่ 3 (เม.ย. - มิ.ย.)</option>
+              <option value="4">ไตรมาสที่ 4 (ก.ค. - ก.ย.)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Code (MOIT) -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">รหัสตัวชี้วัด (Code) *</label>
+          <input type="text" id="ita-code-input" required placeholder="เช่น MOIT 1, MOIT 2, OIT 1..." class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+
+        <!-- Document Title -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ชื่อเอกสารหลักฐานทางการ *</label>
+          <input type="text" id="ita-title-input" required placeholder="เช่น ประกาศเจตนารมณ์นโยบาย No Gift Policy จากการปฏิบัติหน้าที่..." class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+
+        <!-- Link URL -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ลิงก์เอกสาร (URL) *</label>
+          <input type="url" id="ita-url-input" required placeholder="เช่น https://drive.google.com/... หรือ ลิงก์ไฟล์ PDF" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          <p class="text-[10px] text-slate-400 mt-1">สามารถใส่ลิงก์ Google Drive, Cloud Drive, OneDrive หรือ URL เอกสารภายนอกได้</p>
+        </div>
+
+        <div class="pt-4 flex justify-end space-x-2 border-t">
+          <button type="button" onclick="closeItaModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl font-medium">ยกเลิก</button>
+          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold shadow">บันทึกข้อมูล</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/appointment.js"></script>
+  <script>
+    // Security & Authentication Guard
+    const isLoggedIn = sessionStorage.getItem('nakae_admin_logged_in') === 'true' || localStorage.getItem('nakae_admin_logged_in') === 'true';
+    if (!isLoggedIn) {
+      window.location.href = 'login.html';
+    }
+
+    // Logout Handler
+    function handleLogout() {
+      if (confirm('คุณต้องการออกจากระบบผู้ดูแลใช่หรือไม่?')) {
+        sessionStorage.removeItem('nakae_admin_logged_in');
+        sessionStorage.removeItem('nakae_admin_user');
+        localStorage.removeItem('nakae_admin_logged_in');
+        window.location.href = 'login.html';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initAdminTabs();
+      reloadAppointmentsTable();
+      reloadDoctorsAdmin();
+      reloadComplaintsTable();
+      reloadSlidesAdmin();
+      reloadNewsAdmin();
+      reloadItaAdmin();
+    });
+
+    function initAdminTabs() {
+      const tabAptBtn = document.getElementById('tab-apt-btn');
+      const tabDocsBtn = document.getElementById('tab-docs-btn');
+      const tabSlidesBtn = document.getElementById('tab-slides-btn');
+      const tabNewsBtn = document.getElementById('tab-news-btn');
+      const tabItaBtn = document.getElementById('tab-ita-btn');
+      const tabCpBtn = document.getElementById('tab-cp-btn');
+      
+      const tabAptContent = document.getElementById('tab-apt-content');
+      const tabDocsContent = document.getElementById('tab-docs-content');
+      const tabSlidesContent = document.getElementById('tab-slides-content');
+      const tabNewsContent = document.getElementById('tab-news-content');
+      const tabItaContent = document.getElementById('tab-ita-content');
+      const tabCpContent = document.getElementById('tab-cp-content');
+
+      const allBtns = [tabAptBtn, tabDocsBtn, tabSlidesBtn, tabNewsBtn, tabItaBtn, tabCpBtn];
+      const allContents = [tabAptContent, tabDocsContent, tabSlidesContent, tabNewsContent, tabItaContent, tabCpContent];
+
+      function activate(btn, content) {
+        allBtns.forEach(b => b.className = 'px-5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center');
+        allContents.forEach(c => c.classList.add('hidden'));
+
+        btn.className = 'px-5 py-2.5 rounded-xl bg-navy-900 text-white transition flex items-center';
+        content.classList.remove('hidden');
+      }
+
+      tabAptBtn.addEventListener('click', () => activate(tabAptBtn, tabAptContent));
+      tabDocsBtn.addEventListener('click', () => activate(tabDocsBtn, tabDocsContent));
+      tabSlidesBtn.addEventListener('click', () => activate(tabSlidesBtn, tabSlidesContent));
+      tabNewsBtn.addEventListener('click', () => activate(tabNewsBtn, tabNewsContent));
+      tabItaBtn.addEventListener('click', () => activate(tabItaBtn, tabItaContent));
+      tabCpBtn.addEventListener('click', () => activate(tabCpBtn, tabCpContent));
+
+      const searchInput = document.getElementById('admin-apt-search');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          reloadAppointmentsTable(e.target.value.trim().toLowerCase());
+        });
+      }
+    }
+
+    // Reload Appointments Table
+    function reloadAppointmentsTable(filter = '') {
+      const list = getStoredAppointments();
+      const tbody = document.getElementById('apt-table-body');
+      
+      document.getElementById('stat-total-apt').textContent = list.length;
+      document.getElementById('stat-pending-apt').textContent = list.filter(a => a.status === 'ยืนยันแล้ว').length;
+
+      if (!tbody) return;
+
+      let filtered = list;
+      if (filter) {
+        filtered = list.filter(item => 
+          item.fullName.toLowerCase().includes(filter) ||
+          item.queueNumber.toLowerCase().includes(filter) ||
+          item.idCard.includes(filter) ||
+          item.departmentName.toLowerCase().includes(filter)
+        );
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-400">ไม่พบข้อมูลการนัดหมาย</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-3 font-mono font-bold text-sky-700">${item.queueNumber}</td>
+          <td class="py-3 px-3">
+            <div class="font-bold text-navy-900">${item.fullName}</div>
+            <div class="text-[11px] font-mono text-slate-400">${item.idCard}</div>
+          </td>
+          <td class="py-3 px-3 font-mono">${item.phone}</td>
+          <td class="py-3 px-3">
+            <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 text-[10px] font-semibold border border-emerald-200">${item.rights}</span>
+          </td>
+          <td class="py-3 px-3">
+            <div>${item.departmentName}</div>
+            <div class="text-[11px] text-slate-400">${item.doctorName}</div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="font-semibold text-slate-700">${item.date}</div>
+            <div class="text-[11px] text-sky-600">${item.timeSlot}</div>
+          </td>
+          <td class="py-3 px-3">
+            <select onchange="updateAppointmentStatus('${item.id}', this.value)" class="text-xs px-2 py-1 rounded-lg border bg-white ${
+              item.status === 'เสร็จสิ้น' ? 'text-emerald-700 bg-emerald-50' : 
+              item.status === 'ยกเลิก' ? 'text-rose-700 bg-rose-50' : 'text-sky-700 bg-sky-50'
+            }">
+              <option value="ยืนยันแล้ว" ${item.status === 'ยืนยันแล้ว' ? 'selected' : ''}>ยืนยันแล้ว</option>
+              <option value="เสร็จสิ้น" ${item.status === 'เสร็จสิ้น' ? 'selected' : ''}>เสร็จสิ้น</option>
+              <option value="ยกเลิก" ${item.status === 'ยกเลิก' ? 'selected' : ''}>ยกเลิก</option>
+            </select>
+          </td>
+          <td class="py-3 px-3 text-center space-x-1">
+            <button onclick="viewSlipById('${item.id}')" class="p-1.5 text-sky-600 hover:text-sky-800" title="ดูใบนัด">
+              <i class="fa-solid fa-print"></i>
+            </button>
+            <button onclick="deleteAppointment('${item.id}')" class="p-1.5 text-rose-500 hover:text-rose-700" title="ลบรายการ">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    window.updateAppointmentStatus = function(aptId, newStatus) {
+      const list = getStoredAppointments();
+      const idx = list.findIndex(a => a.id === aptId);
+      if (idx !== -1) {
+        list[idx].status = newStatus;
+        saveAppointments(list);
+        showToast(`อัปเดตสถานะเป็น "${newStatus}" เรียบร้อยแล้ว`, 'success');
+        reloadAppointmentsTable();
+      }
+    };
+
+    window.deleteAppointment = function(aptId) {
+      if (!confirm('ต้องการลบรายการนัดหมายนี้ใช่หรือไม่?')) return;
+      let list = getStoredAppointments();
+      list = list.filter(a => a.id !== aptId);
+      saveAppointments(list);
+      showToast('ลบรายการนัดหมายแล้ว', 'info');
+      reloadAppointmentsTable();
+    };
+
+    // Reload Doctors Grid
+    function reloadDoctorsAdmin() {
+      const grid = document.getElementById('admin-doctors-grid');
+      const docs = HOSPITAL_DATA.doctors;
+      document.getElementById('stat-total-docs').textContent = `${docs.length} ท่าน`;
+
+      if (!grid) return;
+      grid.innerHTML = docs.map((doc, idx) => `
+        <div class="bg-slate-50 border rounded-2xl p-4 flex flex-col justify-between hover:shadow-sm transition">
+          <div>
+            <div class="h-32 rounded-xl overflow-hidden mb-3 bg-slate-200">
+              <img src="${doc.image}" class="w-full h-full object-cover">
+            </div>
+            <h4 class="font-bold text-navy-900 text-xs">${doc.name}</h4>
+            <p class="text-[11px] text-sky-600">${doc.title}</p>
+            <p class="text-[10px] text-slate-500 mt-1"><strong>ตรวจ:</strong> ${doc.schedule}</p>
+          </div>
+          <div class="flex justify-end space-x-2 pt-3 mt-3 border-t">
+            <button onclick="editDoctor(${idx})" class="text-xs text-sky-600 hover:text-sky-800 font-semibold">แก้ไข</button>
+            <button onclick="deleteDoctor(${idx})" class="text-xs text-rose-500 hover:text-rose-700 font-semibold">ลบ</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Doctor modal management
+    window.openDoctorModal = function(editIdx = null) {
+      const modal = document.getElementById('doctor-modal');
+      const title = document.getElementById('doc-modal-title');
+      const form = document.getElementById('doctor-form');
+
+      form.reset();
+      document.getElementById('edit-doc-id').value = '';
+
+      if (editIdx !== null) {
+        const doc = HOSPITAL_DATA.doctors[editIdx];
+        title.innerHTML = `<i class="fa-solid fa-pen-to-square text-sky-600 mr-2"></i> แก้ไขข้อมูลแพทย์`;
+        document.getElementById('edit-doc-id').value = editIdx;
+        document.getElementById('doc-name').value = doc.name;
+        document.getElementById('doc-title').value = doc.title;
+        document.getElementById('doc-dept').value = doc.department;
+        document.getElementById('doc-specialty').value = doc.specialty;
+        document.getElementById('doc-education').value = doc.education;
+        document.getElementById('doc-schedule').value = doc.schedule;
+        document.getElementById('doc-image').value = doc.image;
+      } else {
+        title.innerHTML = `<i class="fa-solid fa-user-doctor text-sky-600 mr-2"></i> เพิ่มแพทย์ใหม่`;
+      }
+
+      modal.classList.remove('hidden');
+    };
+
+    window.closeDoctorModal = function() {
+      document.getElementById('doctor-modal').classList.add('hidden');
+    };
+
+    window.editDoctor = function(idx) {
+      openDoctorModal(idx);
+    };
+
+    window.deleteDoctor = function(idx) {
+      if (!confirm('ต้องการลบข้อมูลแพทย์ท่านนี้ใช่หรือไม่?')) return;
+      HOSPITAL_DATA.doctors.splice(idx, 1);
+      saveHospitalData(HOSPITAL_DATA);
+      showToast('ลบข้อมูลแพทย์เรียบร้อยแล้ว', 'info');
+      reloadDoctorsAdmin();
+    };
+
+    document.getElementById('doctor-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const editIdx = document.getElementById('edit-doc-id').value;
+      const deptSelect = document.getElementById('doc-dept');
+      const deptName = deptSelect.options[deptSelect.selectedIndex].text;
+
+      const docObj = {
+        id: editIdx !== '' ? HOSPITAL_DATA.doctors[editIdx].id : `doc-${Date.now()}`,
+        name: document.getElementById('doc-name').value,
+        title: document.getElementById('doc-title').value,
+        department: deptSelect.value,
+        departmentName: deptName,
+        specialty: document.getElementById('doc-specialty').value,
+        education: document.getElementById('doc-education').value,
+        schedule: document.getElementById('doc-schedule').value,
+        image: document.getElementById('doc-image').value || 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=500&auto=format&fit=crop&q=80'
+      };
+
+      if (editIdx !== '') {
+        HOSPITAL_DATA.doctors[editIdx] = docObj;
+        showToast('แก้ไขข้อมูลแพทย์สำเร็จแล้ว', 'success');
+      } else {
+        HOSPITAL_DATA.doctors.push(docObj);
+        showToast('เพิ่มแพทย์ท่านใหม่สำเร็จแล้ว', 'success');
+      }
+
+      saveHospitalData(HOSPITAL_DATA);
+      closeDoctorModal();
+      reloadDoctorsAdmin();
+    });
+
+    // Reload Complaints Table
+    function reloadComplaintsTable() {
+      const STORAGE_KEY = 'nakae_hospital_complaints';
+      const data = localStorage.getItem(STORAGE_KEY);
+      const list = data ? JSON.parse(data) : [];
+      const tbody = document.getElementById('cp-table-body');
+
+      document.getElementById('stat-total-cp').textContent = list.length;
+      if (!tbody) return;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">ยังไม่มีข้อร้องเรียน</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(item => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-3 font-mono font-bold text-navy-900">${item.id}</td>
+          <td class="py-3 px-3">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
+              item.type === 'ข้อร้องเรียน' ? 'bg-rose-100 text-rose-800' : 
+              item.type === 'คำชมเชย' ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800'
+            }">${item.type}</span>
+            <div class="text-[11px] text-slate-500 mt-0.5">${item.category}</div>
+          </td>
+          <td class="py-3 px-3 max-w-xs">
+            <div class="font-bold text-navy-900">${item.subject}</div>
+            <p class="text-[11px] text-slate-500 line-clamp-2">${item.detail}</p>
+          </td>
+          <td class="py-3 px-3">
+            <div>${item.author}</div>
+            <div class="text-[11px] font-mono text-slate-400">${item.contact}</div>
+          </td>
+          <td class="py-3 px-3 text-[11px]">${item.date}</td>
+          <td class="py-3 px-3">
+            <span class="px-2 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-medium block text-center">${item.status}</span>
+          </td>
+          <td class="py-3 px-3 text-center">
+            <button onclick="resolveComplaint('${item.id}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold">
+              ปิดเรื่อง
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    window.resolveComplaint = function(ticketId) {
+      const STORAGE_KEY = 'nakae_hospital_complaints';
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (!data) return;
+      let list = JSON.parse(data);
+      const idx = list.findIndex(c => c.id === ticketId);
+      if (idx !== -1) {
+        list[idx].status = 'ดำเนินการแก้ไขแล้วเสร็จ';
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        showToast('อัปเดตสถานะเรื่องร้องเรียนแล้ว', 'success');
+        reloadComplaintsTable();
+      }
+    };
+
+    // ==========================================
+    // HERO SLIDES MANAGEMENT IN ADMIN
+    // ==========================================
+    function getAdminSlides() {
+      const data = getHospitalData();
+      return (data && Array.isArray(data.slides)) ? data.slides : DEFAULT_HOSPITAL_DATA.slides;
+    }
+
+    function saveAdminSlides(slidesList) {
+      const data = getHospitalData();
+      data.slides = slidesList;
+      saveHospitalData(data);
+      if (typeof HOSPITAL_DATA !== 'undefined') {
+        HOSPITAL_DATA.slides = slidesList;
+      }
+    }
+
+    function reloadSlidesAdmin() {
+      const slides = getAdminSlides();
+      const grid = document.getElementById('admin-slides-grid');
+      const statEl = document.getElementById('stat-total-slides');
+      if (statEl) statEl.textContent = `${slides.length} สไลด์`;
+      if (!grid) return;
+
+      if (slides.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl">
+            <i class="fa-solid fa-images text-4xl text-slate-300 mb-3 block"></i>
+            <p class="text-sm text-slate-500 font-medium">ยังไม่มีสไลด์ในระบบ</p>
+            <button onclick="openSlideModal()" class="mt-3 px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-bold transition">
+              + เพิ่มสไลด์แรก
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = slides.map((slide, idx) => `
+        <div class="bg-white border border-slate-200/90 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+          
+          <!-- Image & Overlay Header -->
+          <div class="relative h-44 bg-slate-900 overflow-hidden group">
+            <img src="${slide.image}" alt="${slide.badge}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80'">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
+            
+            <div class="absolute top-3 left-3 right-3 flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-xl bg-black/60 backdrop-blur-md text-white text-[11px] font-bold border border-white/20">
+                สไลด์ที่ ${idx + 1} / ${slides.length}
+              </span>
+              <span class="px-2.5 py-1 rounded-xl bg-sky-500 text-white text-[11px] font-bold shadow truncate max-w-[200px]">
+                <i class="fa-solid ${slide.badgeIcon || 'fa-tag'} mr-1"></i> ${slide.badge}
+              </span>
+            </div>
+
+            <div class="absolute bottom-3 left-3 right-3 text-white">
+              <h4 class="font-bold text-sm text-white line-clamp-1 drop-shadow">
+                ${slide.title.replace(/<[^>]+>/g, ' ')}
+              </h4>
+            </div>
+          </div>
+
+          <!-- Body Content -->
+          <div class="p-5 space-y-3.5 flex-grow text-xs">
+            <p class="text-slate-600 line-clamp-2 leading-relaxed">
+              ${slide.description}
+            </p>
+
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+              <div class="flex items-center text-slate-700">
+                <span class="text-slate-400 font-semibold w-16 shrink-0">ปุ่มหลัก:</span>
+                <span class="font-bold text-sky-700 truncate">${slide.primaryBtnText}</span>
+                <span class="text-slate-300 mx-2">→</span>
+                <span class="font-mono text-[11px] text-slate-500 truncate">${slide.primaryBtnLink}</span>
+              </div>
+              ${slide.secondaryBtnText ? `
+              <div class="flex items-center text-slate-700">
+                <span class="text-slate-400 font-semibold w-16 shrink-0">ปุ่มรอง:</span>
+                <span class="font-semibold text-slate-800 truncate">${slide.secondaryBtnText}</span>
+                <span class="text-slate-300 mx-2">→</span>
+                <span class="font-mono text-[11px] text-slate-500 truncate">${slide.secondaryBtnLink}</span>
+              </div>` : ''}
+            </div>
+          </div>
+
+          <!-- Controls Footer -->
+          <div class="px-5 py-3.5 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between">
+            <!-- Order Buttons -->
+            <div class="flex items-center space-x-1">
+              <button onclick="moveSlideUp(${idx})" ${idx === 0 ? 'disabled' : ''} class="p-1.5 px-2.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed text-xs transition" title="เลื่อนขึ้น">
+                <i class="fa-solid fa-arrow-up"></i>
+              </button>
+              <button onclick="moveSlideDown(${idx})" ${idx === slides.length - 1 ? 'disabled' : ''} class="p-1.5 px-2.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed text-xs transition" title="เลื่อนลง">
+                <i class="fa-solid fa-arrow-down"></i>
+              </button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-2">
+              <button onclick="editSlide(${idx})" class="px-3.5 py-1.5 rounded-xl bg-navy-900 hover:bg-sky-600 text-white text-xs font-bold transition flex items-center shadow-sm">
+                <i class="fa-solid fa-pen-to-square mr-1.5"></i> แก้ไข
+              </button>
+              <button onclick="deleteSlide(${idx})" class="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold transition flex items-center border border-rose-200">
+                <i class="fa-solid fa-trash mr-1.5"></i> ลบ
+              </button>
+            </div>
+          </div>
+
+        </div>
+      `).join('');
+    }
+
+    window.openSlideModal = function(editIndex = -1) {
+      const modal = document.getElementById('slide-modal');
+      const form = document.getElementById('slide-form');
+      const title = document.getElementById('slide-modal-title');
+      const indexInput = document.getElementById('edit-slide-index');
+      if (!modal || !form) return;
+
+      indexInput.value = editIndex;
+
+      if (editIndex >= 0) {
+        const slides = getAdminSlides();
+        const slide = slides[editIndex];
+        if (!slide) return;
+
+        title.innerHTML = `<i class="fa-solid fa-pen-to-square text-sky-600 mr-2"></i> แก้ไขสไลด์ที่ ${editIndex + 1}`;
+        document.getElementById('slide-badge-input').value = slide.badge || '';
+        document.getElementById('slide-badge-icon-input').value = slide.badgeIcon || 'fa-shield-heart';
+        document.getElementById('slide-title-input').value = slide.title || '';
+        document.getElementById('slide-desc-input').value = slide.description || '';
+        document.getElementById('slide-image-input').value = slide.image || '';
+        document.getElementById('slide-primary-text').value = slide.primaryBtnText || '';
+        document.getElementById('slide-primary-link').value = slide.primaryBtnLink || '';
+        document.getElementById('slide-primary-color').value = slide.primaryBtnClass || 'bg-sky-500 hover:bg-sky-400 shadow-sky-500/30';
+        document.getElementById('slide-primary-icon').value = slide.primaryBtnIcon || 'fa-arrow-right';
+        document.getElementById('slide-secondary-text').value = slide.secondaryBtnText || '';
+        document.getElementById('slide-secondary-link').value = slide.secondaryBtnLink || '';
+      } else {
+        title.innerHTML = `<i class="fa-solid fa-plus text-sky-600 mr-2"></i> เพิ่มสไลด์ใหม่`;
+        form.reset();
+        document.getElementById('slide-badge-icon-input').value = 'fa-shield-heart';
+        document.getElementById('slide-primary-color').value = 'bg-sky-500 hover:bg-sky-400 shadow-sky-500/30';
+        document.getElementById('slide-primary-icon').value = 'fa-calendar-check';
+        document.getElementById('slide-image-input').value = 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1600&auto=format&fit=crop&q=80';
+      }
+
+      modal.classList.remove('hidden');
+    };
+
+    window.closeSlideModal = function() {
+      const modal = document.getElementById('slide-modal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.setSlidePresetImage = function(url) {
+      const input = document.getElementById('slide-image-input');
+      if (input) input.value = url;
+    };
+
+    window.editSlide = function(idx) {
+      openSlideModal(idx);
+    };
+
+    window.deleteSlide = function(idx) {
+      const slides = getAdminSlides();
+      if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบสไลด์ที่ ${idx + 1} "${slides[idx].badge}" ?`)) return;
+
+      slides.splice(idx, 1);
+      saveAdminSlides(slides);
+      reloadSlidesAdmin();
+      showToast('ลบสไลด์เรียบร้อยแล้ว', 'success');
+    };
+
+    window.moveSlideUp = function(idx) {
+      if (idx <= 0) return;
+      const slides = getAdminSlides();
+      const temp = slides[idx];
+      slides[idx] = slides[idx - 1];
+      slides[idx - 1] = temp;
+      saveAdminSlides(slides);
+      reloadSlidesAdmin();
+      showToast('เลื่อนลำดับสไลด์ขึ้นเรียบร้อย', 'info');
+    };
+
+    window.moveSlideDown = function(idx) {
+      const slides = getAdminSlides();
+      if (idx >= slides.length - 1) return;
+      const temp = slides[idx];
+      slides[idx] = slides[idx + 1];
+      slides[idx + 1] = temp;
+      saveAdminSlides(slides);
+      reloadSlidesAdmin();
+      showToast('เลื่อนลำดับสไลด์ลงเรียบร้อย', 'info');
+    };
+
+    window.resetSlidesToDefault = function() {
+      if (!confirm('คุณต้องการรีเซ็ตสไลด์ทั้งหมดกลับเป็นค่าเริ่มต้น 4 สไลด์มาตรฐานของโรงพยาบาลนาแก ใช่หรือไม่?')) return;
+      saveAdminSlides(JSON.parse(JSON.stringify(DEFAULT_HOSPITAL_DATA.slides)));
+      reloadSlidesAdmin();
+      showToast('รีเซ็ตสไลด์เป็นค่าเริ่มต้นเรียบร้อยแล้ว', 'success');
+    };
+
+    // Slide Form Submit Handler
+    const slideForm = document.getElementById('slide-form');
+    if (slideForm) {
+      slideForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const editIdx = parseInt(document.getElementById('edit-slide-index').value);
+        const slides = getAdminSlides();
+
+        const slideData = {
+          id: editIdx >= 0 && slides[editIdx]?.id ? slides[editIdx].id : `slide-${Date.now()}`,
+          badge: document.getElementById('slide-badge-input').value.trim(),
+          badgeIcon: document.getElementById('slide-badge-icon-input').value.trim() || 'fa-shield-heart',
+          title: document.getElementById('slide-title-input').value.trim(),
+          description: document.getElementById('slide-desc-input').value.trim(),
+          image: document.getElementById('slide-image-input').value.trim(),
+          primaryBtnText: document.getElementById('slide-primary-text').value.trim(),
+          primaryBtnLink: document.getElementById('slide-primary-link').value.trim(),
+          primaryBtnIcon: document.getElementById('slide-primary-icon').value.trim() || 'fa-arrow-right',
+          primaryBtnClass: document.getElementById('slide-primary-color').value,
+          secondaryBtnText: document.getElementById('slide-secondary-text').value.trim(),
+          secondaryBtnLink: document.getElementById('slide-secondary-link').value.trim(),
+          secondaryBtnIcon: 'fa-circle-info'
+        };
+
+        if (editIdx >= 0) {
+          slides[editIdx] = slideData;
+          showToast(`บันทึกการแก้ไขสไลด์ที่ ${editIdx + 1} สำเร็จ`, 'success');
+        } else {
+          slides.push(slideData);
+          showToast('เพิ่มสไลด์ใหม่เข้าสู่หน้าแรกเรียบร้อยแล้ว', 'success');
+        }
+
+        saveAdminSlides(slides);
+        closeSlideModal();
+        reloadSlidesAdmin();
+      });
+    }
+
+    // ==========================================
+    // NEWS & ACTIVITIES MANAGEMENT IN ADMIN
+    // ==========================================
+    let adminNewsActiveCategory = 'all';
+
+    function getAdminNews() {
+      const data = getHospitalData();
+      return (data && Array.isArray(data.news)) ? data.news : DEFAULT_HOSPITAL_DATA.news;
+    }
+
+    function saveAdminNews(newsList) {
+      const data = getHospitalData();
+      data.news = newsList;
+      saveHospitalData(data);
+      if (typeof HOSPITAL_DATA !== 'undefined') {
+        HOSPITAL_DATA.news = newsList;
+      }
+    }
+
+    function reloadNewsAdmin(filter = '', category = adminNewsActiveCategory) {
+      const list = getAdminNews();
+      const grid = document.getElementById('admin-news-grid');
+      const statEl = document.getElementById('stat-total-news');
+      if (statEl) statEl.textContent = `${list.length} รายการ`;
+      if (!grid) return;
+
+      let filtered = list;
+      if (category !== 'all') {
+        filtered = filtered.filter(n => n.category === category);
+      }
+      if (filter) {
+        const q = filter.toLowerCase();
+        filtered = filtered.filter(n => 
+          n.title.toLowerCase().includes(q) ||
+          (n.summary && n.summary.toLowerCase().includes(q)) ||
+          (n.location && n.location.toLowerCase().includes(q))
+        );
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl">
+            <i class="fa-solid fa-newspaper text-4xl text-slate-300 mb-3 block"></i>
+            <p class="text-sm text-slate-500 font-medium">ไม่พบรายการข่าวหรือกิจกรรมที่ตรงกับเงื่อนไข</p>
+            <button onclick="openNewsModal()" class="mt-3 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition">
+              + เพิ่มข่าว/กิจกรรมใหม่
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const isActivity = item.category === 'ข่าวกิจกรรม';
+        const hasGallery = Array.isArray(item.gallery) && item.gallery.length > 0;
+
+        return `
+          <div class="bg-white border border-slate-200/90 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
+            
+            <!-- Cover Image & Badge Header -->
+            <div class="relative h-44 bg-slate-900 overflow-hidden">
+              <img src="${item.image || 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80'}" alt="${item.title}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop&q=80'">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent"></div>
+              
+              <div class="absolute top-3 left-3 right-3 flex items-center justify-between">
+                <div>${getCategoryBadge(item.category)}</div>
+                ${hasGallery ? `
+                <span class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-bold border border-white/20">
+                  <i class="fa-solid fa-camera mr-1 text-sky-400"></i> ${item.gallery.length} ภาพ
+                </span>` : ''}
+              </div>
+
+              <div class="absolute bottom-3 left-3 right-3 text-white">
+                <span class="text-[11px] font-mono text-slate-300"><i class="fa-regular fa-calendar mr-1"></i> ${item.date}</span>
+                ${item.featured ? '<span class="ml-2 px-2 py-0.5 rounded bg-amber-400 text-navy-950 text-[10px] font-bold">★ ข่าวเด่น</span>' : ''}
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-5 space-y-2.5 flex-grow text-xs">
+              ${item.location ? `
+              <div class="text-[11px] font-semibold text-sky-700 line-clamp-1 flex items-center">
+                <i class="fa-solid fa-location-dot mr-1.5 text-sky-500"></i> ${item.location}
+              </div>` : ''}
+
+              <h4 class="font-bold text-sm text-navy-900 line-clamp-2 leading-snug">
+                ${item.title}
+              </h4>
+
+              <p class="text-slate-500 line-clamp-2 leading-relaxed">
+                ${item.summary}
+              </p>
+
+              ${item.attachmentName ? `
+              <div class="text-[11px] text-purple-700 bg-purple-50 px-2.5 py-1.5 rounded-lg border border-purple-100 flex items-center">
+                <i class="fa-solid fa-file-pdf mr-1.5"></i>
+                <span class="truncate">${item.attachmentName}</span>
+              </div>` : ''}
+            </div>
+
+            <!-- Action Buttons Footer -->
+            <div class="px-5 py-3.5 bg-slate-50/70 border-t border-slate-100 flex items-center justify-end space-x-2">
+              <button onclick="editNews('${item.id}')" class="px-3.5 py-1.5 rounded-xl bg-navy-900 hover:bg-emerald-600 text-white text-xs font-bold transition flex items-center shadow-sm">
+                <i class="fa-solid fa-pen-to-square mr-1.5"></i> แก้ไข
+              </button>
+              <button onclick="deleteNews('${item.id}')" class="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold transition flex items-center border border-rose-200">
+                <i class="fa-solid fa-trash mr-1.5"></i> ลบ
+              </button>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.filterAdminNews = function(category, btnEl) {
+      adminNewsActiveCategory = category;
+      document.querySelectorAll('.admin-news-cat-btn').forEach(b => {
+        b.className = 'admin-news-cat-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition';
+      });
+      if (btnEl) {
+        btnEl.className = 'admin-news-cat-btn px-3 py-1.5 rounded-lg bg-navy-900 text-white font-bold transition';
+      }
+      const searchVal = document.getElementById('admin-news-search')?.value.trim() || '';
+      reloadNewsAdmin(searchVal, category);
+    };
+
+    window.openNewsModal = function(editId = '') {
+      const modal = document.getElementById('news-modal');
+      const form = document.getElementById('news-form');
+      const title = document.getElementById('news-modal-title');
+      const idInput = document.getElementById('edit-news-id');
+      if (!modal || !form) return;
+
+      idInput.value = editId;
+
+      if (editId) {
+        const list = getAdminNews();
+        const item = list.find(n => n.id === editId);
+        if (!item) return;
+
+        title.innerHTML = `<i class="fa-solid fa-pen-to-square text-emerald-600 mr-2"></i> แก้ไขข่าวสาร/กิจกรรม`;
+        document.getElementById('news-category-input').value = item.category || 'ข่าวกิจกรรม';
+        document.getElementById('news-date-input').value = item.date || '';
+        document.getElementById('news-title-input').value = item.title || '';
+        document.getElementById('news-location-input').value = item.location || '';
+        document.getElementById('news-department-input').value = item.department || '';
+        document.getElementById('news-summary-input').value = item.summary || '';
+        document.getElementById('news-image-input').value = item.image || '';
+        document.getElementById('news-gallery-input').value = Array.isArray(item.gallery) ? item.gallery.join('\n') : '';
+        document.getElementById('news-attachment-name').value = item.attachmentName || '';
+        document.getElementById('news-attachment-url').value = item.attachmentUrl || '';
+        document.getElementById('news-featured-input').checked = !!item.featured;
+        toggleCategorySpecificFields(item.category);
+      } else {
+        title.innerHTML = `<i class="fa-solid fa-plus text-emerald-600 mr-2"></i> เพิ่มข่าวสาร/กิจกรรมใหม่`;
+        form.reset();
+        document.getElementById('news-category-input').value = 'ข่าวกิจกรรม';
+        document.getElementById('news-date-input').value = new Date().toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' });
+        document.getElementById('news-image-input').value = 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800&auto=format&fit=crop&q=80';
+        toggleCategorySpecificFields('ข่าวกิจกรรม');
+      }
+
+      modal.classList.remove('hidden');
+    };
+
+    window.closeNewsModal = function() {
+      const modal = document.getElementById('news-modal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.toggleCategorySpecificFields = function(category) {
+      const activityGroup = document.getElementById('field-activity-group');
+      const galleryGroup = document.getElementById('field-gallery-group');
+      const attachmentGroup = document.getElementById('field-attachment-group');
+
+      if (category === 'ข่าวกิจกรรม') {
+        if (activityGroup) activityGroup.classList.remove('hidden');
+        if (galleryGroup) galleryGroup.classList.remove('hidden');
+        if (attachmentGroup) attachmentGroup.classList.add('hidden');
+      } else if (category === 'ประกาศทางการ' || category === 'จัดซื้อจัดจ้าง') {
+        if (activityGroup) activityGroup.classList.add('hidden');
+        if (galleryGroup) galleryGroup.classList.add('hidden');
+        if (attachmentGroup) attachmentGroup.classList.remove('hidden');
+      } else {
+        if (activityGroup) activityGroup.classList.add('hidden');
+        if (galleryGroup) galleryGroup.classList.add('hidden');
+        if (attachmentGroup) attachmentGroup.classList.add('hidden');
+      }
+    };
+
+    window.setNewsPresetImage = function(url) {
+      const input = document.getElementById('news-image-input');
+      if (input) input.value = url;
+    };
+
+    window.editNews = function(id) {
+      openNewsModal(id);
+    };
+
+    window.deleteNews = function(id) {
+      const list = getAdminNews();
+      const item = list.find(n => n.id === id);
+      if (!item) return;
+
+      if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบ "${item.title}" ?`)) return;
+
+      const updated = list.filter(n => n.id !== id);
+      saveAdminNews(updated);
+      reloadNewsAdmin();
+      showToast('ลบรายการข่าวสาร/กิจกรรมเรียบร้อยแล้ว', 'success');
+    };
+
+    window.resetNewsToDefault = function() {
+      if (!confirm('คุณต้องการรีเซ็ตข่าวสารและกิจกรรมทั้งหมดกลับเป็นค่าเริ่มต้น ใช่หรือไม่?')) return;
+      saveAdminNews(JSON.parse(JSON.stringify(DEFAULT_HOSPITAL_DATA.news)));
+      reloadNewsAdmin();
+      showToast('รีเซ็ตข้อมูลข่าวสารเป็นค่าเริ่มต้นเรียบร้อยแล้ว', 'success');
+    };
+
+    // News Form Submit Handler
+    const newsForm = document.getElementById('news-form');
+    if (newsForm) {
+      newsForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const editId = document.getElementById('edit-news-id').value.trim();
+        const list = getAdminNews();
+
+        const category = document.getElementById('news-category-input').value;
+        const galleryRaw = document.getElementById('news-gallery-input').value.trim();
+        const galleryUrls = galleryRaw ? galleryRaw.split('\n').map(u => u.trim()).filter(u => u.length > 0) : [];
+
+        const newsData = {
+          id: editId ? editId : `news-${Date.now()}`,
+          category: category,
+          date: document.getElementById('news-date-input').value.trim(),
+          title: document.getElementById('news-title-input').value.trim(),
+          location: document.getElementById('news-location-input').value.trim(),
+          department: document.getElementById('news-department-input').value.trim(),
+          summary: document.getElementById('news-summary-input').value.trim(),
+          image: document.getElementById('news-image-input').value.trim(),
+          gallery: galleryUrls.length > 0 ? galleryUrls : (category === 'ข่าวกิจกรรม' ? [document.getElementById('news-image-input').value.trim()] : undefined),
+          attachmentName: document.getElementById('news-attachment-name').value.trim(),
+          attachmentUrl: document.getElementById('news-attachment-url').value.trim(),
+          featured: document.getElementById('news-featured-input').checked
+        };
+
+        if (editId) {
+          const idx = list.findIndex(n => n.id === editId);
+          if (idx !== -1) {
+            list[idx] = newsData;
+            showToast('บันทึกการแก้ไขเรียบร้อยแล้ว', 'success');
+          }
+        } else {
+          list.unshift(newsData);
+          showToast('เพิ่มข่าวสาร/กิจกรรมใหม่เรียบร้อยแล้ว', 'success');
+        }
+
+        saveAdminNews(list);
+        closeNewsModal();
+        reloadNewsAdmin();
+      });
+    }
+
+    const adminNewsSearch = document.getElementById('admin-news-search');
+    if (adminNewsSearch) {
+      adminNewsSearch.addEventListener('input', (e) => {
+        reloadNewsAdmin(e.target.value.trim(), adminNewsActiveCategory);
+      });
+    }
+
+    // ============================================
+    // ITA MANAGEMENT (INTEGRITY & TRANSPARENCY)
+    // ============================================
+    let adminItaActiveYear = 'all';
+
+    function getAdminIta() {
+      const data = getHospitalData();
+      return data.ita || [];
+    }
+
+    function saveAdminIta(itaList) {
+      const data = getHospitalData();
+      data.ita = itaList;
+      saveHospitalData(data);
+    }
+
+    function reloadItaAdmin(searchKeyword = '', yearFilter = adminItaActiveYear) {
+      const list = getAdminIta();
+      const statTotal = document.getElementById('stat-total-ita');
+      if (statTotal) statTotal.textContent = `${list.length} รายการ`;
+
+      const tbody = document.getElementById('admin-ita-table-body');
+      if (!tbody) return;
+
+      let filtered = [...list];
+
+      // Filter by Year
+      if (yearFilter && yearFilter !== 'all') {
+        filtered = filtered.filter(item => String(item.year) === String(yearFilter));
+      }
+
+      // Filter by Search Keyword
+      if (searchKeyword) {
+        const kw = searchKeyword.toLowerCase();
+        filtered = filtered.filter(item =>
+          (item.code && item.code.toLowerCase().includes(kw)) ||
+          (item.title && item.title.toLowerCase().includes(kw)) ||
+          (item.year && String(item.year).includes(kw))
+        );
+      }
+
+      // Sort by Year (least to greatest: 2566 -> 2567 -> 2568 -> 2569), then by Quarter (1->4), then by Code
+      filtered.sort((a, b) => {
+        if (Number(a.year) !== Number(b.year)) {
+          return Number(a.year) - Number(b.year);
+        }
+        if (Number(a.quarter) !== Number(b.quarter)) {
+          return Number(a.quarter) - Number(b.quarter);
+        }
+        return (a.code || '').localeCompare(b.code || '');
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400">ไม่พบเอกสาร ITA ตามเงื่อนไขที่เลือก</td></tr>`;
+        return;
+      }
+
+      const qLabel = {
+        "1": "ไตรมาส 1 (Q1)",
+        "2": "ไตรมาส 2 (Q2)",
+        "3": "ไตรมาส 3 (Q3)",
+        "4": "ไตรมาส 4 (Q4)"
+      };
+
+      tbody.innerHTML = filtered.map(item => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-3">
+            <span class="px-2 py-0.5 rounded-lg bg-navy-100 text-navy-800 font-bold font-mono text-[11px] border border-navy-200">
+              พ.ศ. ${item.year}
+            </span>
+          </td>
+          <td class="py-3 px-3 font-semibold text-slate-700">
+            ${qLabel[item.quarter] || `ไตรมาส ${item.quarter}`}
+          </td>
+          <td class="py-3 px-3">
+            <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-bold border border-slate-200">
+              ${item.code || '-'}
+            </span>
+          </td>
+          <td class="py-3 px-3">
+            <div class="font-medium text-slate-900 max-w-md">${item.title}</div>
+          </td>
+          <td class="py-3 px-3">
+            <a href="${item.url || '#'}" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-sky-600 hover:text-sky-800 hover:underline">
+              <i class="fa-brands fa-google-drive"></i> เปิดดูลิงก์ <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </td>
+          <td class="py-3 px-3 text-right space-x-2 whitespace-nowrap">
+            <button onclick="openItaModal('${item.id}')" class="text-xs text-sky-600 hover:text-sky-800 font-semibold" title="แก้ไขเอกสาร">
+              <i class="fa-solid fa-pen-to-square"></i> แก้ไข
+            </button>
+            <button onclick="deleteIta('${item.id}')" class="text-xs text-rose-500 hover:text-rose-700 font-semibold" title="ลบเอกสาร">
+              <i class="fa-solid fa-trash"></i> ลบ
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    window.filterAdminIta = function(year, btn) {
+      adminItaActiveYear = year;
+      document.querySelectorAll('.admin-ita-year-btn').forEach(b => {
+        b.className = 'admin-ita-year-btn px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold transition';
+      });
+      btn.className = 'admin-ita-year-btn px-3 py-1.5 rounded-lg bg-navy-900 text-white font-bold transition';
+      const searchKw = document.getElementById('admin-ita-search') ? document.getElementById('admin-ita-search').value.trim() : '';
+      reloadItaAdmin(searchKw, year);
+    };
+
+    window.openItaModal = function(editId = null) {
+      const modal = document.getElementById('ita-modal');
+      const title = document.getElementById('ita-modal-title');
+      const form = document.getElementById('ita-form');
+      form.reset();
+      document.getElementById('edit-ita-id').value = '';
+
+      if (editId) {
+        const list = getAdminIta();
+        const item = list.find(i => i.id === editId);
+        if (item) {
+          title.innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> แก้ไขเอกสาร ITA`;
+          document.getElementById('edit-ita-id').value = item.id;
+          document.getElementById('ita-year-input').value = item.year;
+          document.getElementById('ita-quarter-input').value = item.quarter;
+          document.getElementById('ita-code-input').value = item.code || '';
+          document.getElementById('ita-title-input').value = item.title || '';
+          document.getElementById('ita-url-input').value = item.url || '';
+        }
+      } else {
+        title.innerHTML = `<i class="fa-solid fa-shield-halved text-indigo-600 mr-2"></i> เพิ่มเอกสาร ITA ใหม่`;
+        document.getElementById('ita-year-input').value = '2569';
+        document.getElementById('ita-quarter-input').value = '1';
+      }
+
+      modal.classList.remove('hidden');
+    };
+
+    window.closeItaModal = function() {
+      const modal = document.getElementById('ita-modal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.deleteIta = function(id) {
+      if (!confirm('คุณต้องการลบเอกสาร ITA รายการนี้ใช่หรือไม่?')) return;
+      const list = getAdminIta();
+      const updated = list.filter(i => i.id !== id);
+      saveAdminIta(updated);
+      reloadItaAdmin();
+      showToast('ลบเอกสาร ITA เรียบร้อยแล้ว', 'success');
+    };
+
+    window.resetItaToDefault = function() {
+      if (!confirm('คุณต้องการรีเซ็ตฐานข้อมูลเอกสาร ITA ทั้งหมดกลับเป็นค่าเริ่มต้น (2566 - 2569) ใช่หรือไม่?')) return;
+      saveAdminIta(JSON.parse(JSON.stringify(DEFAULT_HOSPITAL_DATA.ita)));
+      reloadItaAdmin();
+      showToast('รีเซ็ตฐานข้อมูลเอกสาร ITA เป็นค่าเริ่มต้นเรียบร้อยแล้ว', 'success');
+    };
+
+    // ITA Form Submit Handler
+    const itaForm = document.getElementById('ita-form');
+    if (itaForm) {
+      itaForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const editId = document.getElementById('edit-ita-id').value.trim();
+        const list = getAdminIta();
+
+        const itaData = {
+          id: editId ? editId : `ita-${Date.now()}`,
+          year: document.getElementById('ita-year-input').value.trim(),
+          quarter: document.getElementById('ita-quarter-input').value.trim(),
+          code: document.getElementById('ita-code-input').value.trim(),
+          title: document.getElementById('ita-title-input').value.trim(),
+          url: document.getElementById('ita-url-input').value.trim()
+        };
+
+        if (editId) {
+          const idx = list.findIndex(i => i.id === editId);
+          if (idx !== -1) {
+            list[idx] = itaData;
+            showToast('บันทึกการแก้ไขเอกสาร ITA เรียบร้อยแล้ว', 'success');
+          }
+        } else {
+          list.push(itaData);
+          showToast('เพิ่มเอกสาร ITA ใหม่เรียบร้อยแล้ว', 'success');
+        }
+
+        saveAdminIta(list);
+        closeItaModal();
+        reloadItaAdmin();
+      });
+    }
+
+    const adminItaSearch = document.getElementById('admin-ita-search');
+    if (adminItaSearch) {
+      adminItaSearch.addEventListener('input', (e) => {
+        reloadItaAdmin(e.target.value.trim(), adminItaActiveYear);
+      });
+    }
+  </script>
+</body>
+</html>

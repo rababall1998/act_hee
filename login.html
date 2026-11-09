@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบเจ้าหน้าที่ - โรงพยาบาลนาแก</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: '#f0f5fa',
+              100: '#e1ecf5',
+              600: '#1b4d89',
+              800: '#133560',
+              900: '#0F2C59',
+              950: '#091c38'
+            }
+          },
+          fontFamily: {
+            prompt: ['Prompt', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-prompt min-h-screen flex flex-col justify-between">
+
+  <!-- TOP BAR -->
+  <div class="theme-bg-dark bg-navy-950 text-slate-200 text-xs py-2 px-4 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-hospital text-sky-400"></i>
+        <span>ระบบสารสนเทศโรงพยาบาลนาแก จังหวัดนครพนม</span>
+      </div>
+      <a href="index.html" class="hover:text-sky-300 transition flex items-center">
+        <i class="fa-solid fa-arrow-left mr-1.5"></i> กลับหน้าเว็บไซต์หลัก
+      </a>
+    </div>
+  </div>
+
+  <!-- LOGIN CONTAINER -->
+  <main class="flex-grow flex items-center justify-center p-4 py-12">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-200 p-8 sm:p-10 relative overflow-hidden">
+      
+      <!-- Decorative Accent Top Bar -->
+      <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-sky-500 via-blue-600 to-navy-900"></div>
+
+      <!-- Header & Hospital Brand -->
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center text-white text-3xl mx-auto mb-3 shadow-lg shadow-sky-500/20">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h1 class="text-2xl font-extrabold text-navy-900">เข้าสู่ระบบเจ้าหน้าที่</h1>
+        <p class="text-xs text-slate-500 mt-1">โรงพยาบาลนาแก อำเภอนาแก จังหวัดนครพนม</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="space-y-5">
+        
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            ชื่อผู้ใช้งาน (Username) <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative">
+            <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input type="text" id="login-username" required placeholder="กรอกชื่อผู้ใช้งาน" class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            รหัสผ่าน (Password) <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input type="password" id="login-password" required placeholder="กรอกรหัสผ่าน" class="w-full pl-11 pr-11 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <button type="button" id="toggle-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-sm">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="login-error" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center space-x-2">
+          <i class="fa-solid fa-circle-exclamation text-rose-500 text-base shrink-0"></i>
+          <span>ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง</span>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-600">
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" id="remember-me" class="rounded text-sky-600 focus:ring-sky-500">
+            <span>จดจำการเข้าสู่ระบบ</span>
+          </label>
+          <a href="#" onclick="alert('กรุณาติดต่อกลุ่มงานสารสนเทศทางการแพทย์ โทร 042-571205, 042-571235 หรือ Email: Contact.nakaehospital@gmail.com'); return false;" class="text-sky-600 hover:underline">ลืมรหัสผ่าน?</a>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-navy-900 to-sky-700 hover:from-navy-800 hover:to-sky-600 text-white font-bold text-sm shadow-lg shadow-sky-900/20 transition transform hover:-translate-y-0.5 flex items-center justify-center">
+          <i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบแอดมิน
+        </button>
+
+      </form>
+
+      <div class="mt-8 pt-6 border-t border-slate-100 text-center">
+        <a href="index.html" class="text-xs text-slate-500 hover:text-sky-600 transition inline-flex items-center">
+          <i class="fa-solid fa-house mr-1.5"></i> กลับไปยังหน้าแรกสำหรับประชาชน
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="theme-bg-dark bg-navy-950 text-slate-400 text-xs py-4 text-center border-t border-navy-800">
+    <p>© 2569 โรงพยาบาลนาแก 75 หมู่ 7 ตำบลบ้านแก้ง อำเภอนาแก จังหวัดนครพนม 48130 • ระบบความปลอดภัยและการจัดการข้อมูล</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="assets/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if already logged in -> redirect to admin.html
+      if (sessionStorage.getItem('nakae_admin_logged_in') === 'true' || localStorage.getItem('nakae_admin_logged_in') === 'true') {
+        window.location.href = 'admin.html';
+        return;
+      }
+
+      const form = document.getElementById('login-form');
+      const userInput = document.getElementById('login-username');
+      const passInput = document.getElementById('login-password');
+      const errorBox = document.getElementById('login-error');
+      const togglePass = document.getElementById('toggle-password');
+      const rememberCheckbox = document.getElementById('remember-me');
+
+      // Toggle password visibility
+      togglePass.addEventListener('click', () => {
+        const isPass = passInput.type === 'password';
+        passInput.type = isPass ? 'text' : 'password';
+        togglePass.innerHTML = isPass ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
+      });
+
+      // Submit Login
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = userInput.value.trim();
+        const password = passInput.value.trim();
+
+        // Check credentials: nakae11109 / nakae11109
+        if (username === 'nakae11109' && password === 'nakae11109') {
+          errorBox.classList.add('hidden');
+
+          // Save auth state
+          if (rememberCheckbox.checked) {
+            localStorage.setItem('nakae_admin_logged_in', 'true');
+          }
+          sessionStorage.setItem('nakae_admin_logged_in', 'true');
+          sessionStorage.setItem('nakae_admin_user', username);
+
+          showToast('เข้าสู่ระบบสำเร็จ กำลังพาไปยังหน้าจัดการ...', 'success');
+
+          setTimeout(() => {
+            window.location.href = 'admin.html';
+          }, 600);
+        } else {
+          errorBox.classList.remove('hidden');
+          passInput.value = '';
+          passInput.focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

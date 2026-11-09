@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ตารางออกตรวจแพทย์ - โรงพยาบาลนาแก</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: '#f0f5fa',
+              100: '#e1ecf5',
+              600: '#1b4d89',
+              800: '#133560',
+              900: '#0F2C59',
+              950: '#091c38'
+            }
+          },
+          fontFamily: {
+            prompt: ['Prompt', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-prompt flex flex-col min-h-screen">
+
+  <!-- TOP BAR -->
+  <div class="theme-bg-dark bg-navy-950 text-slate-200 text-xs py-2 px-4 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center space-x-4">
+        <span class="flex items-center text-rose-400 font-semibold">
+          <span class="relative flex h-2.5 w-2.5 mr-2">
+            <span class="red-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+          </span>
+          ฉุกเฉิน 24 ชม. โทร: <a href="tel:1669" class="ml-1 font-bold text-white hover:underline">1669</a>
+        </span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="login.html" class="hover:text-sky-300 transition flex items-center">
+          <i class="fa-solid fa-user-shield mr-1"></i> สำหรับเจ้าหน้าที่
+        </a>
+        <a href="appointment.html" class="hover:text-sky-300 transition flex items-center">
+          <i class="fa-solid fa-calendar-check mr-1"></i> จองคิวนัดหมาย
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header id="main-nav" class="sticky top-0 z-40 theme-bg-primary bg-navy-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center space-x-3.5 group">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+            <i class="fa-solid fa-hospital text-2xl"></i>
+          </div>
+          <div>
+            <span class="block text-xl font-bold tracking-tight text-white">โรงพยาบาลนาแก</span>
+            <span class="block text-xs text-sky-200 tracking-wider">NA KAE HOSPITAL • สสจ.นครพนม</span>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center space-x-1 font-medium text-sm">
+          <a href="index.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition">หน้าแรก</a>
+          <a href="about.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition">ข้อมูลองค์กร</a>
+          <a href="ita.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition">ITA โรงพยาบาล</a>
+          <a href="services.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition">บริการทางการแพทย์</a>
+          <a href="doctors.html" class="px-3.5 py-2 rounded-lg bg-white/10 text-sky-300 font-semibold">ตารางออกตรวจแพทย์</a>
+          <a href="news.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition">ข่าวสารและกิจกรรม</a>
+          <a href="contact.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition">ติดต่อเรา</a>
+        </nav>
+
+        <div class="hidden sm:flex items-center space-x-3">
+          <a href="appointment.html" class="inline-flex items-center px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold text-sm shadow">
+            <i class="fa-regular fa-calendar-check mr-2"></i> จองคิวตรวจออนไลน์
+          </a>
+        </div>
+
+        <div class="flex lg:hidden">
+          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-200 hover:text-white hover:bg-white/10">
+            <i class="fa-solid fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-navy-950 border-t border-navy-800 px-4 pt-3 pb-6 space-y-2">
+      <a href="index.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">หน้าแรก</a>
+      <a href="about.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ข้อมูลองค์กร</a>
+      <a href="ita.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900"><i class="fa-solid fa-shield-halved mr-2"></i> ITA โรงพยาบาล</a>
+      <a href="services.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">บริการทางการแพทย์</a>
+      <a href="doctors.html" class="block px-3 py-2.5 rounded-lg text-sky-300 font-semibold bg-navy-900">ตารางออกตรวจแพทย์</a>
+      <a href="news.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900"><i class="fa-solid fa-newspaper mr-2"></i> ข่าวสารและกิจกรรม</a>
+      <a href="appointment.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">จองคิวตรวจออนไลน์</a>
+      <a href="complaint.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ร้องเรียน/เสนอแนะ</a>
+      <a href="contact.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ติดต่อเรา</a>
+    </div>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <section class="theme-bg-primary bg-navy-900 text-white py-12 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="text-xs font-semibold text-sky-300 bg-white/10 px-3 py-1 rounded-full border border-sky-400/20">ทำเนียบแพทย์และตารางตรวจ</span>
+      <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">ตารางแพทย์ออกตรวจประจำสัปดาห์</h1>
+      <p class="text-sm text-slate-300 mt-1">ตรวจสอบวัน-เวลาออกตรวจของแพทย์เฉพาะทางและแพทย์ประจำคลินิก โรงพยาบาลนาแก</p>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow space-y-10">
+    
+    <!-- SEARCH & FILTER TABS -->
+    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
+      <!-- Search Input -->
+      <div class="relative w-full md:w-80">
+        <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <input type="text" id="doctor-search" placeholder="ค้นหาชื่อแพทย์, ความเชี่ยวชาญ..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap items-center gap-1.5 w-full md:w-auto text-xs font-medium" id="filter-buttons">
+        <button data-filter="all" class="filter-btn active px-3.5 py-2 rounded-xl bg-navy-900 text-white shadow">ทั้งหมด</button>
+        <button data-filter="opd" class="filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">ผู้ป่วยนอก (OPD)</button>
+        <button data-filter="pediatrics" class="filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">กุมารเวชกรรม</button>
+        <button data-filter="dental" class="filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">ทันตกรรม</button>
+        <button data-filter="ortho-surgery" class="filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">กระดูกและข้อ</button>
+        <button data-filter="obgyn" class="filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">สูติ-นรีเวช</button>
+        <button data-filter="er" class="filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">ฉุกเฉิน (ER)</button>
+        <button data-filter="thai-med" class="filter-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700">แพทย์แผนไทย</button>
+      </div>
+    </div>
+
+    <!-- DOCTOR CARDS GRID -->
+    <div id="doctor-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Generated Dynamically by JS -->
+    </div>
+
+    <!-- WEEKLY SCHEDULE OVERVIEW TABLE -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm mt-12">
+      <div class="border-b pb-4 mb-6 flex items-center justify-between">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-navy-900 flex items-center">
+            <i class="fa-solid fa-calendar-days text-sky-600 mr-2.5"></i> ตารางสรุปเวลาตรวจคลินิกบริการทั่วไป
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">เวลาทำการวันจันทร์ - ศุกร์ (เว้นวันหยุดราชการและนักขัตฤกษ์)</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-700 border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-navy-900 border-b border-slate-300">
+              <th class="py-3 px-4 font-bold">แผนก / คลินิก</th>
+              <th class="py-3 px-4 font-bold">วันเปิดให้บริการ</th>
+              <th class="py-3 px-4 font-bold">เวลาทำการปกติ</th>
+              <th class="py-3 px-4 font-bold">คลินิกพิเศษนอกเวลา</th>
+              <th class="py-3 px-4 font-bold text-center">นัดหมาย</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 px-4 font-semibold text-navy-900 flex items-center">
+                <i class="fa-solid fa-stethoscope text-sky-600 mr-2 text-base"></i> แผนกผู้ป่วยนอก (OPD)
+              </td>
+              <td class="py-3.5 px-4">จันทร์ - ศุกร์</td>
+              <td class="py-3.5 px-4">08:00 - 16:30 น.</td>
+              <td class="py-3.5 px-4 text-emerald-600 font-medium">16:30 - 20:00 น.</td>
+              <td class="py-3.5 px-4 text-center">
+                <a href="appointment.html?dept=opd" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold">จองคิว</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 px-4 font-semibold text-navy-900 flex items-center">
+                <i class="fa-solid fa-baby text-amber-500 mr-2 text-base"></i> คลินิกกุมารเวชกรรม (เด็ก)
+              </td>
+              <td class="py-3.5 px-4">จันทร์ - ศุกร์</td>
+              <td class="py-3.5 px-4">08:30 - 16:00 น.</td>
+              <td class="py-3.5 px-4 text-slate-400">-</td>
+              <td class="py-3.5 px-4 text-center">
+                <a href="appointment.html?dept=pediatrics" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold">จองคิว</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 px-4 font-semibold text-navy-900 flex items-center">
+                <i class="fa-solid fa-tooth text-teal-600 mr-2 text-base"></i> คลินิกทันตกรรม
+              </td>
+              <td class="py-3.5 px-4">จันทร์ - ศุกร์</td>
+              <td class="py-3.5 px-4">08:30 - 16:30 น.</td>
+              <td class="py-3.5 px-4 text-emerald-600 font-medium">16:30 - 20:00 น.</td>
+              <td class="py-3.5 px-4 text-center">
+                <a href="appointment.html?dept=dental" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold">จองคิว</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 px-4 font-semibold text-navy-900 flex items-center">
+                <i class="fa-solid fa-bone text-sky-600 mr-2 text-base"></i> ศัลยกรรมกระดูกและข้อ
+              </td>
+              <td class="py-3.5 px-4">พุธ, ศุกร์</td>
+              <td class="py-3.5 px-4">08:30 - 15:30 น.</td>
+              <td class="py-3.5 px-4 text-slate-400">-</td>
+              <td class="py-3.5 px-4 text-center">
+                <a href="appointment.html?dept=ortho-surgery" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold">จองคิว</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 px-4 font-semibold text-navy-900 flex items-center">
+                <i class="fa-solid fa-person-pregnant text-pink-600 mr-2 text-base"></i> คลินิกสูติ-นรีเวชกรรม
+              </td>
+              <td class="py-3.5 px-4">จันทร์, พฤหัสบดี</td>
+              <td class="py-3.5 px-4">08:30 - 15:00 น.</td>
+              <td class="py-3.5 px-4 text-slate-400">-</td>
+              <td class="py-3.5 px-4 text-center">
+                <a href="appointment.html?dept=obgyn" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold">จองคิว</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 px-4 font-semibold text-navy-900 flex items-center">
+                <i class="fa-solid fa-spa text-emerald-600 mr-2 text-base"></i> งานแพทย์แผนไทย
+              </td>
+              <td class="py-3.5 px-4">จันทร์ - ศุกร์</td>
+              <td class="py-3.5 px-4">08:30 - 16:00 น.</td>
+              <td class="py-3.5 px-4 text-emerald-600 font-medium">16:30 - 19:30 น.</td>
+              <td class="py-3.5 px-4 text-center">
+                <a href="appointment.html?dept=thai-med" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold">จองคิว</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-rose-50/50 bg-rose-50/20">
+              <td class="py-3.5 px-4 font-bold text-rose-700 flex items-center">
+                <i class="fa-solid fa-truck-medical text-rose-600 mr-2 text-base"></i> แผนกอุบัติเหตุ-ฉุกเฉิน (ER)
+              </td>
+              <td class="py-3.5 px-4 font-semibold text-rose-700">ทุกวัน</td>
+              <td class="py-3.5 px-4 font-bold text-rose-700" colspan="2">เปิดทำการตลอด 24 ชั่วโมง (ไม่ต้องนัดหมาย)</td>
+              <td class="py-3.5 px-4 text-center">
+                <a href="tel:1669" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold">โทร 1669</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="theme-bg-dark bg-navy-950 text-slate-400 text-sm mt-auto border-t border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-xs">
+      <p>© 2569 โรงพยาบาลนาแก 75 หมู่ 7 ตำบลบ้านแก้ง อำเภอนาแก จังหวัดนครพนม 48130</p>
+      <p class="mt-1 text-slate-500">โทรศัพท์: 042-571205, 042-571235 | Email: Contact.nakaehospital@gmail.com | ฉุกเฉิน 1669</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderDoctors(HOSPITAL_DATA.doctors);
+
+      // Filtering logic
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const searchInput = document.getElementById('doctor-search');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-navy-900', 'text-white', 'shadow');
+            b.classList.add('bg-slate-100', 'text-slate-700');
+          });
+          btn.classList.add('bg-navy-900', 'text-white', 'shadow');
+          btn.classList.remove('bg-slate-100', 'text-slate-700');
+
+          const category = btn.getAttribute('data-filter');
+          applyFilter(category, searchInput.value.trim().toLowerCase());
+        });
+      });
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const activeBtn = document.querySelector('.filter-btn.bg-navy-900');
+          const category = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+          applyFilter(category, e.target.value.trim().toLowerCase());
+        });
+      }
+
+      function applyFilter(category, keyword) {
+        let filtered = HOSPITAL_DATA.doctors;
+        if (category && category !== 'all') {
+          filtered = filtered.filter(d => d.department === category);
+        }
+        if (keyword) {
+          filtered = filtered.filter(d => 
+            d.name.toLowerCase().includes(keyword) || 
+            d.specialty.toLowerCase().includes(keyword) || 
+            d.departmentName.toLowerCase().includes(keyword)
+          );
+        }
+        renderDoctors(filtered);
+      }
+
+      function renderDoctors(docs) {
+        const grid = document.getElementById('doctor-grid');
+        if (!grid) return;
+
+        if (docs.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-3xl border">
+              <i class="fa-regular fa-user-doctor text-4xl mb-3 text-slate-300"></i>
+              <p class="text-base font-semibold text-slate-600">ไม่พบรายชื่อแพทย์ตามเงื่อนไขที่ค้นหา</p>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = docs.map(doc => `
+          <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md border border-slate-200 transition card-hover-lift flex flex-col justify-between">
+            <div>
+              <div class="h-56 overflow-hidden bg-slate-100 relative">
+                <img src="${doc.image}" alt="${doc.name}" class="w-full h-full object-cover">
+                <span class="absolute bottom-3 left-3 bg-navy-900/90 text-white text-xs px-2.5 py-1 rounded-lg backdrop-blur-sm">
+                  ${doc.departmentName}
+                </span>
+              </div>
+              <div class="p-5">
+                <h4 class="font-bold text-navy-900 text-base">${doc.name}</h4>
+                <p class="text-xs text-sky-600 font-medium mt-0.5">${doc.title}</p>
+                
+                <div class="mt-4 pt-3 border-t text-xs text-slate-600 space-y-2">
+                  <div class="flex items-start">
+                    <i class="fa-solid fa-award text-amber-500 mt-0.5 mr-2"></i>
+                    <span><strong>ความชำนาญ:</strong> ${doc.specialty}</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fa-solid fa-graduation-cap text-sky-500 mt-0.5 mr-2"></i>
+                    <span><strong>การศึกษา:</strong> ${doc.education}</span>
+                  </div>
+                  <div class="flex items-start text-navy-900 font-semibold bg-sky-50/70 p-2.5 rounded-xl">
+                    <i class="fa-regular fa-clock text-sky-600 mt-0.5 mr-2"></i>
+                    <span><strong>วันออกตรวจ:</strong> ${doc.schedule}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-5 pt-0">
+              <a href="appointment.html?dept=${doc.department}&doc=${encodeURIComponent(doc.name)}" class="block w-full py-2.5 text-center rounded-xl bg-navy-900 hover:bg-sky-600 text-white font-semibold text-xs transition shadow-sm">
+                <i class="fa-regular fa-calendar-check mr-1.5"></i> นัดหมายตรวจแพทย์ท่านนี้
+              </a>
+            </div>
+          </div>
+        `).join('');
+      }
+    });
+  </script>
+</body>
+</html>

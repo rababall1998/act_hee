@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ฐานข้อมูลเอกสาร ITA - โรงพยาบาลนาแก จังหวัดนครพนม</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Sarabun -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Theme Config & Base Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              800: '#1e293b',
+              900: '#0f172a',
+              950: '#020617',
+            }
+          },
+          fontFamily: {
+            sans: ['Sarabun', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- TOP BAR -->
+  <div class="bg-navy-950 text-slate-200 text-xs py-2 px-4 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center space-x-4">
+        <span class="flex items-center text-rose-400 font-semibold">
+          ฉุกเฉิน 24 ชม. โทร: <a href="tel:1669" class="ml-1 font-bold text-white hover:underline">1669</a> / <a href="tel:042571205" class="ml-1 font-bold text-white hover:underline">042-571205</a>
+        </span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="login.html" class="hover:text-sky-300 transition flex items-center">
+          <i class="fa-solid fa-user-shield mr-1"></i> สำหรับเจ้าหน้าที่
+        </a>
+        <a href="appointment.html" class="hover:text-sky-300 transition flex items-center">
+          <i class="fa-solid fa-calendar-check mr-1"></i> จองคิวนัดหมาย
+        </a>
+        <a href="complaint.html" class="hover:text-sky-300 transition flex items-center">
+          <i class="fa-regular fa-comment-dots mr-1"></i> ร้องเรียน/เสนอแนะ
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header id="main-nav" class="sticky top-0 z-40 bg-navy-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- LOGO & BRAND -->
+        <a href="index.html" class="flex items-center space-x-3.5 group">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+            <i class="fa-solid fa-hospital text-2xl"></i>
+          </div>
+          <div>
+            <span class="block text-xl font-bold tracking-tight text-white">โรงพยาบาลนาแก</span>
+            <span class="block text-xs text-sky-200 tracking-wider">NA KAE HOSPITAL • สสจ.นครพนม</span>
+          </div>
+        </a>
+
+        <!-- DESKTOP MENU -->
+        <nav class="hidden lg:flex items-center space-x-1 font-medium text-sm">
+          <a href="index.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">หน้าแรก</a>
+          <a href="about.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">ข้อมูลองค์กร</a>
+          <a href="ita.html" class="px-3.5 py-2 rounded-lg bg-navy-800 text-sky-300 font-semibold"><i class="fa-solid fa-shield-halved mr-1.5 text-xs"></i>ITA โรงพยาบาล</a>
+          <a href="services.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">บริการทางการแพทย์</a>
+          <a href="doctors.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">ตารางออกตรวจแพทย์</a>
+          <a href="news.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">ข่าวสารและกิจกรรม</a>
+          <a href="contact.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">ติดต่อเรา</a>
+        </nav>
+
+        <!-- CTA BUTTONS -->
+        <div class="hidden sm:flex items-center space-x-3">
+          <a href="appointment.html" class="inline-flex items-center px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold text-sm shadow">
+            <i class="fa-regular fa-calendar-check mr-2"></i> จองคิวตรวจออนไลน์
+          </a>
+        </div>
+
+        <!-- MOBILE MENU BUTTON -->
+        <div class="flex lg:hidden">
+          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800">
+            <i class="fa-solid fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-navy-950 border-t border-navy-800 px-4 pt-3 pb-6 space-y-2">
+      <a href="index.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">หน้าแรก</a>
+      <a href="about.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ข้อมูลองค์กร</a>
+      <a href="ita.html" class="block px-3 py-2.5 rounded-lg text-sky-300 font-semibold bg-navy-900"><i class="fa-solid fa-shield-halved mr-2"></i>ITA โรงพยาบาล</a>
+      <a href="services.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">บริการทางการแพทย์</a>
+      <a href="doctors.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ตารางออกตรวจแพทย์</a>
+      <a href="news.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900"><i class="fa-solid fa-newspaper mr-2"></i> ข่าวสารและกิจกรรม</a>
+      <a href="appointment.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">จองคิวตรวจออนไลน์</a>
+      <a href="complaint.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ร้องเรียน/เสนอแนะ</a>
+      <a href="contact.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ติดต่อเรา</a>
+      <a href="login.html" class="block px-3 py-2.5 rounded-lg text-amber-300 hover:bg-navy-900"><i class="fa-solid fa-lock mr-2"></i> สำหรับเจ้าหน้าที่ (Admin)</a>
+    </div>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <section class="bg-navy-900 text-white py-12 border-b border-navy-800 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/70 border border-emerald-500/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+            <i class="fa-solid fa-shield-halved"></i> การประเมินคุณธรรมและความโปร่งใส (ITA)
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight">
+            ฐานข้อมูลเอกสาร ITA โรงพยาบาลนาแก
+          </h1>
+          <p class="text-sm text-slate-300 mt-1 max-w-2xl">
+            Integrity and Transparency Assessment : MOIT ศูนย์รวมเอกสารหลักฐานตัวชี้วัดความโปร่งใสตามเกณฑ์กระทรวงสาธารณสุข
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="about.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-200 text-xs font-medium border border-navy-700 transition">
+            <i class="fa-solid fa-arrow-left mr-2"></i> กลับหน้าข้อมูลองค์กร
+          </a>
+          <a href="login.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow transition">
+            <i class="fa-solid fa-gear mr-2"></i> แอดมินจัดการ ITA
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full space-y-8">
+
+    <!-- CONTROLS & FILTER BAR -->
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      
+      <!-- Year Selector Tabs (Sorted from least to greatest: 2566 -> 2567 -> 2568 -> 2569) -->
+      <div>
+        <span class="text-xs font-bold text-slate-500 block mb-2">เลือกปีงบประมาณ (เรียงตามลำดับ):</span>
+        <div id="ita-year-tabs" class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+          <button onclick="setItaYear('2566')" id="tab-year-2566" class="ita-year-btn px-4 py-2 rounded-lg text-xs font-bold transition">
+            ITA 2566
+          </button>
+          <button onclick="setItaYear('2567')" id="tab-year-2567" class="ita-year-btn px-4 py-2 rounded-lg text-xs font-bold transition">
+            ITA 2567
+          </button>
+          <button onclick="setItaYear('2568')" id="tab-year-2568" class="ita-year-btn px-4 py-2 rounded-lg text-xs font-bold transition">
+            ITA 2568
+          </button>
+          <button onclick="setItaYear('2569')" id="tab-year-2569" class="ita-year-btn px-4 py-2 rounded-lg text-xs font-bold transition">
+            ITA 2569
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Search Box -->
+      <div class="w-full md:w-80">
+        <label for="ita-user-search" class="text-xs font-bold text-slate-500 block mb-2">ค้นหาเอกสารด่วน:</label>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input 
+            type="text" 
+            id="ita-user-search" 
+            placeholder="ค้นหารหัส เช่น MOIT 1 หรือชื่อเอกสาร..." 
+            class="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-slate-50 transition"
+          >
+          <button id="clear-search-btn" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CURRENT YEAR BANNER -->
+    <div class="bg-gradient-to-r from-navy-900 to-navy-800 rounded-2xl p-6 text-white shadow flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-400 text-2xl shrink-0">
+          <i class="fa-solid fa-folder-open"></i>
+        </div>
+        <div>
+          <span class="text-xs text-sky-300 uppercase tracking-wider font-bold">ฐานข้อมูลการประเมินความโปร่งใส</span>
+          <h2 id="current-year-display" class="text-xl sm:text-2xl font-bold tracking-tight text-white mt-0.5">
+            เอกสารหลักฐาน ITA ประจำปีงบประมาณ พ.ศ. 2569
+          </h2>
+          <p class="text-xs text-slate-300 mt-0.5">แบ่งตามไตรมาส 1 - 4 คลิกเพื่อเปิดดูเอกสารหลักฐานได้โดยตรง</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="expandAllQuarters()" class="px-3 py-1.5 rounded-lg bg-navy-700/80 hover:bg-navy-700 text-xs text-slate-200 border border-navy-600 transition">
+          <i class="fa-solid fa-angles-down mr-1"></i> ขยายทั้งหมด
+        </button>
+        <button onclick="collapseAllQuarters()" class="px-3 py-1.5 rounded-lg bg-navy-700/80 hover:bg-navy-700 text-xs text-slate-200 border border-navy-600 transition">
+          <i class="fa-solid fa-angles-up mr-1"></i> ยุบทั้งหมด
+        </button>
+      </div>
+    </div>
+
+    <!-- QUARTERS ACCORDION CONTAINER -->
+    <div id="ita-quarters-container" class="space-y-4">
+      <!-- Rendered dynamically by JavaScript -->
+    </div>
+
+    <!-- EMPTY STATE IF SEARCH YIELDS NO RESULTS -->
+    <div id="ita-empty-state" class="hidden bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-3">
+      <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-2xl mx-auto">
+        <i class="fa-solid fa-folder-minus"></i>
+      </div>
+      <h3 class="text-base font-bold text-navy-900">ไม่พบเอกสารที่ตรงกับคำค้นหา</h3>
+      <p class="text-xs text-slate-500">กรุณาลองเปลี่ยนคำค้นหา หรือกดล้างการค้นหาเพื่อดูเอกสารทั้งหมด</p>
+      <button onclick="resetItaSearch()" class="inline-flex items-center px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow transition">
+        <i class="fa-solid fa-rotate-left mr-2"></i> ล้างการค้นหา
+      </button>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy-950 text-slate-400 text-sm mt-auto border-t border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-xs">
+      <p>© 2569 โรงพยาบาลนาแก 75 หมู่ 7 ตำบลบ้านแก้ง อำเภอนาแก จังหวัดนครพนม 48130</p>
+      <p class="mt-1 text-slate-500">โทรศัพท์: 042-571205, 042-571235 | Email: Contact.nakaehospital@gmail.com | ฉุกเฉิน 1669</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    // ITA Page Specific Logic
+    let currentSelectedYear = '2569';
+    let currentSearchQuery = '';
+
+    const quarterMeta = [
+      { q: "1", title: "ไตรมาสที่ 1 (ตุลาคม - ธันวาคม)", color: "text-sky-600", bg: "bg-sky-500/10", border: "border-sky-500/20" },
+      { q: "2", title: "ไตรมาสที่ 2 (มกราคม - มีนาคม)", color: "text-blue-600", bg: "bg-blue-500/10", border: "border-blue-500/20" },
+      { q: "3", title: "ไตรมาสที่ 3 (เมษายน - มิถุนายน)", color: "text-indigo-600", bg: "bg-indigo-500/10", border: "border-indigo-500/20" },
+      { q: "4", title: "ไตรมาสที่ 4 (กรกฎาคม - กันยายน)", color: "text-purple-600", bg: "bg-purple-500/10", border: "border-purple-500/20" }
+    ];
+
+    function getItaDocs() {
+      const data = getHospitalData();
+      return data.ita || [];
+    }
+
+    function renderItaYearTabs() {
+      // Years ordered from least to greatest: 2566, 2567, 2568, 2569
+      const years = ['2566', '2567', '2568', '2569'];
+      years.forEach(yr => {
+        const btn = document.getElementById('tab-year-' + yr);
+        if (!btn) return;
+        if (yr === currentSelectedYear) {
+          btn.className = "ita-year-btn px-4 py-2 rounded-lg text-xs font-bold bg-navy-900 text-white shadow-sm transition";
+        } else {
+          btn.className = "ita-year-btn px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-navy-900 hover:bg-slate-200 transition";
+        }
+      });
+
+      const displayHeader = document.getElementById('current-year-display');
+      if (displayHeader) {
+        displayHeader.textContent = `เอกสารหลักฐาน ITA ประจำปีงบประมาณ พ.ศ. ${currentSelectedYear}`;
+      }
+    }
+
+    function setItaYear(yr) {
+      currentSelectedYear = yr;
+      renderItaYearTabs();
+      renderItaQuarters();
+    }
+
+    function renderItaQuarters() {
+      const container = document.getElementById('ita-quarters-container');
+      const emptyState = document.getElementById('ita-empty-state');
+      if (!container) return;
+
+      const allDocs = getItaDocs();
+      // Filter by selected year
+      const yearDocs = allDocs.filter(d => String(d.year) === String(currentSelectedYear));
+
+      let matchedTotal = 0;
+      let html = '';
+
+      quarterMeta.forEach(meta => {
+        let qDocs = yearDocs.filter(d => String(d.quarter) === meta.q);
+
+        if (currentSearchQuery) {
+          qDocs = qDocs.filter(d => 
+            (d.code && d.code.toLowerCase().includes(currentSearchQuery)) ||
+            (d.title && d.title.toLowerCase().includes(currentSearchQuery))
+          );
+        }
+
+        matchedTotal += qDocs.length;
+
+        // Render Quarter Accordion
+        html += `
+          <div class="quarter-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition">
+            <button onclick="toggleItaQuarter('${meta.q}')" class="w-full px-5 py-4 bg-slate-50/80 hover:bg-slate-100 flex items-center justify-between text-left transition select-none">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl ${meta.bg} ${meta.color} flex items-center justify-center font-bold text-xs border ${meta.border}">
+                  Q${meta.q}
+                </span>
+                <span class="font-bold text-sm text-navy-900">${meta.title}</span>
+                <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">
+                  ${qDocs.length} รายการ
+                </span>
+              </div>
+              <i id="ita-chevron-${meta.q}" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200"></i>
+            </button>
+
+            <div id="ita-content-${meta.q}" class="divide-y divide-slate-100 ${qDocs.length === 0 ? 'p-6 text-center text-xs text-slate-400' : ''}">
+              ${qDocs.length === 0 ? 'ไม่มีเอกสารในไตรมาสนี้ตามเงื่อนไขที่เลือก' : qDocs.map((doc, idx) => `
+                <div class="p-3.5 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-sky-50/40 transition">
+                  <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 text-xs font-bold border border-slate-200 shrink-0">
+                      ${doc.code || `ลำดับ ${idx + 1}`}
+                    </span>
+                    <span class="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                      ${doc.title}
+                    </span>
+                  </div>
+
+                  <a href="${doc.url || '#'}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm transition shrink-0 self-end sm:self-center">
+                    <i class="fa-brands fa-google-drive"></i> เปิดดูเอกสาร
+                  </a>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      if (matchedTotal === 0 && currentSearchQuery) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        container.innerHTML = html;
+      }
+    }
+
+    function toggleItaQuarter(qId) {
+      const content = document.getElementById('ita-content-' + qId);
+      const icon = document.getElementById('ita-chevron-' + qId);
+      if (!content) return;
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        if (icon) icon.classList.remove('-rotate-90');
+      } else {
+        content.classList.add('hidden');
+        if (icon) icon.classList.add('-rotate-90');
+      }
+    }
+
+    function expandAllQuarters() {
+      ['1', '2', '3', '4'].forEach(q => {
+        const content = document.getElementById('ita-content-' + q);
+        const icon = document.getElementById('ita-chevron-' + q);
+        if (content) content.classList.remove('hidden');
+        if (icon) icon.classList.remove('-rotate-90');
+      });
+    }
+
+    function collapseAllQuarters() {
+      ['1', '2', '3', '4'].forEach(q => {
+        const content = document.getElementById('ita-content-' + q);
+        const icon = document.getElementById('ita-chevron-' + q);
+        if (content) content.classList.add('hidden');
+        if (icon) icon.classList.add('-rotate-90');
+      });
+    }
+
+    function resetItaSearch() {
+      const input = document.getElementById('ita-user-search');
+      if (input) input.value = '';
+      currentSearchQuery = '';
+      document.getElementById('clear-search-btn').classList.add('hidden');
+      renderItaQuarters();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderItaYearTabs();
+      renderItaQuarters();
+
+      const searchInput = document.getElementById('ita-user-search');
+      const clearBtn = document.getElementById('clear-search-btn');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          currentSearchQuery = e.target.value.trim().toLowerCase();
+          if (currentSearchQuery) {
+            clearBtn.classList.remove('hidden');
+          } else {
+            clearBtn.classList.add('hidden');
+          }
+          renderItaQuarters();
+        });
+      }
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', resetItaSearch);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เกี่ยวกับโรงพยาบาล - โรงพยาบาลนาแก</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: '#f0f5fa',
+              100: '#e1ecf5',
+              600: '#1b4d89',
+              800: '#133560',
+              900: '#0F2C59',
+              950: '#091c38'
+            }
+          },
+          fontFamily: {
+            prompt: ['Prompt', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-prompt flex flex-col min-h-screen">
+
+  <!-- TOP BAR -->
+  <div class="bg-navy-950 text-slate-200 text-xs py-2 px-4 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center space-x-4">
+        <span class="flex items-center text-rose-400 font-semibold">
+          ฉุกเฉิน 24 ชม. โทร: <a href="tel:1669" class="ml-1 font-bold text-white hover:underline">1669</a>
+        </span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="login.html" class="hover:text-sky-300 transition flex items-center">
+          <i class="fa-solid fa-user-shield mr-1"></i> สำหรับเจ้าหน้าที่
+        </a>
+        <a href="appointment.html" class="hover:text-sky-300 transition flex items-center">
+          <i class="fa-solid fa-calendar-check mr-1"></i> จองคิวนัดหมาย
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <header id="main-nav" class="sticky top-0 z-40 bg-navy-900 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center space-x-3.5 group">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+            <i class="fa-solid fa-hospital text-2xl"></i>
+          </div>
+          <div>
+            <span class="block text-xl font-bold tracking-tight text-white">โรงพยาบาลนาแก</span>
+            <span class="block text-xs text-sky-200 tracking-wider">NA KAE HOSPITAL • สสจ.นครพนม</span>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center space-x-1 font-medium text-sm">
+          <a href="index.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">หน้าแรก</a>
+          <a href="about.html" class="px-3.5 py-2 rounded-lg bg-navy-800 text-sky-300 font-semibold">ข้อมูลองค์กร</a>
+          <a href="ita.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition"><i class="fa-solid fa-shield-halved mr-1 text-xs"></i>ITA โรงพยาบาล</a>
+          <a href="services.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">บริการทางการแพทย์</a>
+          <a href="doctors.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">ตารางออกตรวจแพทย์</a>
+          <a href="news.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">ข่าวสารและกิจกรรม</a>
+          <a href="contact.html" class="px-3.5 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800 transition">ติดต่อเรา</a>
+        </nav>
+
+        <div class="hidden sm:flex items-center space-x-3">
+          <a href="appointment.html" class="inline-flex items-center px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold text-sm shadow">
+            <i class="fa-regular fa-calendar-check mr-2"></i> จองคิวตรวจออนไลน์
+          </a>
+        </div>
+
+        <div class="flex lg:hidden">
+          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-200 hover:text-white hover:bg-navy-800">
+            <i class="fa-solid fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-navy-950 border-t border-navy-800 px-4 pt-3 pb-6 space-y-2">
+      <a href="index.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">หน้าแรก</a>
+      <a href="about.html" class="block px-3 py-2.5 rounded-lg text-sky-300 font-semibold bg-navy-900">ข้อมูลองค์กร</a>
+      <a href="ita.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900"><i class="fa-solid fa-shield-halved mr-2"></i>ITA โรงพยาบาล</a>
+      <a href="services.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">บริการทางการแพทย์</a>
+      <a href="doctors.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ตารางออกตรวจแพทย์</a>
+      <a href="news.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900"><i class="fa-solid fa-newspaper mr-2"></i> ข่าวสารและกิจกรรม</a>
+      <a href="appointment.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">จองคิวตรวจออนไลน์</a>
+      <a href="complaint.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ร้องเรียน/เสนอแนะ</a>
+      <a href="contact.html" class="block px-3 py-2.5 rounded-lg text-slate-200 hover:bg-navy-900">ติดต่อเรา</a>
+    </div>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <section class="bg-navy-900 text-white py-12 border-b border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="text-xs font-semibold text-sky-400 bg-navy-800 px-3 py-1 rounded-full border border-sky-400/20">ประวัติความเป็นมาและโครงสร้างองค์กร</span>
+      <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">เกี่ยวกับโรงพยาบาลนาแก</h1>
+      <p class="text-sm text-slate-300 mt-1">มุ่งมั่นพัฒนาการบริการสุขภาพที่ได้มาตรฐาน เพื่อคุณภาพชีวิตที่ดีของชาวอำเภอนาแก</p>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow space-y-12">
+    
+    <!-- VISION, MISSION, VALUES -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm text-center">
+        <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center text-2xl mx-auto mb-4">
+          <i class="fa-solid fa-eye"></i>
+        </div>
+        <h3 class="text-lg font-bold text-navy-900 mb-2">วิสัยทัศน์ (Vision)</h3>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          "เป็นโรงพยาบาลชุมชนชั้นนำ ที่ให้บริการสุขภาพได้มาตรฐาน ชุมชนมีส่วนร่วม และบุคลากรมีความสุขในการทำงาน ภายในปี 2570"
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm text-center">
+        <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl mx-auto mb-4">
+          <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <h3 class="text-lg font-bold text-navy-900 mb-2">พันธกิจ (Mission)</h3>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 text-left list-disc pl-5">
+          <li>ให้บริการสุขภาพแบบองค์รวม ทั้งการส่งเสริม ป้องกัน รักษา และฟื้นฟู</li>
+          <li>พัฒนาระบบบริการที่มีคุณภาพและความปลอดภัยตามมาตรฐาน HA</li>
+          <li>ส่งเสริมการมีส่วนร่วมของภาคีเครือข่ายสุขภาพระดับอำเภอ</li>
+        </ul>
+      </div>
+
+      <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm text-center">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl mx-auto mb-4">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+        <h3 class="text-lg font-bold text-navy-900 mb-2">ค่านิยม (Core Values)</h3>
+        <div class="text-xs sm:text-sm text-slate-700 font-bold space-y-1">
+          <span class="block text-sky-600">N - Network (เครือข่ายเข้มแข็ง)</span>
+          <span class="block text-blue-600">A - Accountability (รับผิดชอบต่อหน้าที่)</span>
+          <span class="block text-indigo-600">K - Knowledge (พัฒนาความรู้ต่อเนื่อง)</span>
+          <span class="block text-emerald-600">A - Altruism (เห็นแก่ประโยชน์ส่วนรวม)</span>
+          <span class="block text-teal-600">E - Excellence (มุ่งสู่ความเป็นเลิศ)</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- HOSPITAL HISTORY -->
+    <section class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm space-y-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-navy-900 flex items-center">
+        <i class="fa-solid fa-landmark text-sky-600 mr-3"></i> ประวัติความเป็นมาของโรงพยาบาล
+      </h2>
+      <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+        <p>
+          โรงพยาบาลนาแก สังกัดสำนักงานปลัดกระทรวงสาธารณสุข กระทรวงสาธารณสุข ก่อตั้งขึ้นเพื่อรองรับการให้บริการสาธารณสุขแก่ประชาชนในเขตอำเภอนาแกและพื้นที่อำเภอข้างเคียงในจังหวัดนครพนม
+        </p>
+        <p>
+          ปัจจุบันโรงพยาบาลนาแกได้รับการยกฐานะเป็นโรงพยาบาลชุมชน ขนาด 90 เตียง มีการพัฒนาศักยภาพทั้งด้านอาคารสถานที่ ครุภัณฑ์ทางการแพทย์ และการพัฒนาทักษะของบุคลากร เพื่อรองรับการตรวจวินิจฉัยและรักษาโรคที่ซับซ้อนมากขึ้น ลดการส่งต่อผู้ป่วยไปยังโรงพยาบาลศูนย์ และยกระดับคุณภาพชีวิตของประชาชนในพื้นที่อย่างยั่งยืน
+        </p>
+      </div>
+    </section>
+
+    <!-- EXECUTIVE LEADERSHIP -->
+    <section class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm">
+      <div class="text-center max-w-xl mx-auto mb-10">
+        <span class="text-xs font-bold uppercase tracking-wider text-sky-600 bg-sky-100 px-3 py-1 rounded-full">คณะผู้บริหาร</span>
+        <h2 class="text-xl sm:text-2xl font-bold text-navy-900 mt-2">ผู้บริหารโรงพยาบาลนาแก</h2>
+      </div>
+
+      <div class="max-w-md mx-auto text-center bg-slate-50 rounded-2xl p-6 border border-slate-200">
+        <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 border-4 border-white shadow-md">
+          <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=500&auto=format&fit=crop&q=80" alt="ผู้อำนวยการ" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-lg font-bold text-navy-900">นพ. วรพจน์ ศิริพาณิชย์</h3>
+        <p class="text-xs text-sky-600 font-semibold mt-0.5">ผู้อำนวยการโรงพยาบาลนาแก</p>
+        <p class="text-xs text-slate-500 mt-2">นายแพทย์ชำนาญการพิเศษ ปฏิบัติหน้าที่ผู้อำนวยการโรงพยาบาลนาแก</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy-950 text-slate-400 text-sm mt-auto border-t border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-xs">
+      <p>© 2569 โรงพยาบาลนาแก 75 หมู่ 7 ตำบลบ้านแก้ง อำเภอนาแก จังหวัดนครพนม 48130</p>
+      <p class="mt-1 text-slate-500">โทรศัพท์: 042-571205, 042-571235 | Email: Contact.nakaehospital@gmail.com | ฉุกเฉิน 1669</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
